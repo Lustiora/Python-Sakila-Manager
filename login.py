@@ -39,6 +39,7 @@ while scan > 0:
             rental_data = cursor.fetchone()
             if rental_data: # return_date is null
                 print(f"customer ID : {customer}. Please Return DVD")
+                # Return DVD List 추가
                 break
             else: # return_date is not null
                 # print("Rental Please")
