@@ -77,7 +77,7 @@ def run_main(conn):
             today = datetime.now().date()
             print("-" * 50)
             print("Please Return DVD")
-            log_area.insert(tkinter.END,"---------------------------------------------------------------------------------------------\n"
+            log_area.insert(tkinter.END,"-" * 50 + "\n"
                                         "Please Return DVD\n")
             cursor.execute("""
                            select r.customer_id,
@@ -107,6 +107,9 @@ def run_main(conn):
             print(f"\nTotal Charge : {total_charge:.2f}")
             log_area.insert(tkinter.END, f"\nTotal Charge : {total_charge:.2f}")
             print("-" * 50)
+            log_area.configure(state="disabled")
+        else:
+            log_area.insert(tkinter.END, "-" * 50 + "\nNo overdue items.\n")
             log_area.configure(state="disabled")
     ######################################
     ### 화면 구성
