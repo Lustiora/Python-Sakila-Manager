@@ -1,7 +1,7 @@
 import psycopg2 # postgresql Connect Module
 from datetime import datetime, timedelta # Date Module
 
-def connect_db():
+def connect_db(): # DB 접속 정의
     conn = None  # conn의 기본값 선언
     count = 3  # count의 기본값 선언
     while count > 0:  # count값이 0이 보다 클때까지 반복
@@ -28,7 +28,7 @@ def connect_db():
         print("ID / PW Error")  # 출력
     return conn
 
-def check_customers(conn):
+def check_customers(conn): # 고객 확인 정의
     cursor = conn.cursor()
     scan = 1
     while scan > 0:
@@ -51,7 +51,7 @@ def check_customers(conn):
             print("---Rolled Back---")
     return None, None
 
-def process_return(conn,customer):
+def process_return(conn,customer): # 반납 정의
     cursor = conn.cursor()
     cursor.execute("select * from rental where customer_id = %s and return_date is null",(customer,))  # 조회된 customer_id의 return_date 여부 조회
     rental_data = cursor.fetchone()
@@ -87,7 +87,7 @@ def process_return(conn,customer):
     else:
         return False
 
-def process_rental(conn):
+def process_rental(conn): # 대여 정의
     cursor = conn.cursor()
     scan = 1
     rental_cart = []
@@ -157,6 +157,6 @@ while True:
     else:
         rental_cart , total_fee = process_rental(conn) # 대여 정보 출력
         if total_fee:
-            input(f"Rental Fee Calculation : (Enter)")
+            input(f"Rental Fee Calculation : (Enter)") # 대여료 납입을 확인
 
-conn.close()
+conn.close() # DB 접속 종료
