@@ -48,8 +48,7 @@ def run_main(conn):
             return False
     validation = main.register(check_digit)
     ######################################
-    # DB 조회 모듈
-    def search_db(event=None):
+    def search_db(event=None): # DB 조회 모듈
         global current_customer_id
         global rental_cart
         global total_fee
@@ -284,8 +283,7 @@ def run_main(conn):
     ######################################
     main.mainloop()
 ######################################
-# Window 자동 중앙 정렬 모듈 (미정렬 시 좌측 상단) (tkinter)
-def center_window(window, width, height):
+def center_window(window, width, height): # Window 자동 중앙 정렬 모듈 (미정렬 시 좌측 상단) (tkinter)
     screen_width = window.winfo_screenwidth() # 현재 모니터의 해상도(크기)를 가져옴
     screen_height = window.winfo_screenheight()
     x_pos = (screen_width // 2) - (width // 2) # 정중앙 좌표 계산 \ (//)는 정수 나누기
