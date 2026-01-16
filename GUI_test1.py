@@ -118,10 +118,10 @@ def run_main(conn):
                     f"Customer Id : {barcode[0]} | "
                     f"Title : {barcode[1]} | "
                     f"Rental Date : {(today - return_date).days} days | "
-                    f"Charge : {all_charge:.2f}")  # 소수점 2번째 자리까지만 출력 :.2f
-                log_area.insert(tkinter.END,f"Title : {barcode[1]} | Rental Date : {(today - return_date).days} days | Charge : {all_charge:.2f}\n")
-            print(f"\nTotal Charge : {total_charge:.2f}")
-            log_area.insert(tkinter.END, f"\nTotal Charge : {total_charge:.2f}\n")
+                    f"Charge : ${all_charge:.2f}")  # 소수점 2번째 자리까지만 출력 :.2f
+                log_area.insert(tkinter.END,f"Title : {barcode[1]} | Rental Date : {(today - return_date).days} days | Charge : ${all_charge:.2f}\n")
+            print(f"\nTotal Charge : ${total_charge:.2f}")
+            log_area.insert(tkinter.END, f"\nTotal Charge : ${total_charge:.2f}\n")
             print("-" * 93)
             log_area.configure(state="disabled")
         else:
@@ -182,9 +182,9 @@ def run_main(conn):
             total_fee += rental_fee  # 대여료 합산
             print("-" * 93)
             print(f"Barcode : {inventory_id} | Title : {title} | Rental : {dvd_data[2]}")  # Query Column 기반 위치에 따른 값 출력
-            log_area.insert(tkinter.END, "-" * 93 + f"\nBarcode : {inventory_id} | Title : {title} | Rental : ${dvd_data[2]} x {rental}days | Total Fee : {rental_fee}\n")
+            log_area.insert(tkinter.END, "-" * 93 + f"\nBarcode : {inventory_id} | Title : {title} | Rental : ${dvd_data[2]} x {rental}days | Total Fee : ${rental_fee}\n")
             log_area.see(tkinter.END)
-            print(f"\nToday : {rental_date} | Return Date : {return_date} | Rental : {rental_fee}")  # today와 timedelta 변환된 rental_days 합산하여 Return Date 출력
+            print(f"\nToday : {rental_date} | Return Date : {return_date} | Rental : ${rental_fee}")  # today와 timedelta 변환된 rental_days 합산하여 Return Date 출력
             rental_cart.append((inventory_id, title, rental_date, rental_fee))  # 출력이 필요한 정보 포장
             dvd_barcode.delete(0, tkinter.END)  # dvd_barcode 입력값 삭제
             dvd_barcode.focus_set()
@@ -212,15 +212,15 @@ def run_main(conn):
             print("<-- Title --> | <-- Rental -->")
             for item in rental_cart:
                 print(f"Title : {item[1]} | Rental : {item[3]}")
-                log_area.insert(tkinter.END, "-" * 93 + f"Title : {item[1]} | Rental : {item[3]}\n")
+                log_area.insert(tkinter.END, "-" * 93 + f"Title : {item[1]} | Rental : ${item[3]}\n")
                 log_area.see(tkinter.END)
             print(f"\nTotal Fee : {total_fee}")
-            log_area.insert(tkinter.END, "-" * 93 + f"\n\nTotal Fee : {total_fee}\n\n" + "-" * 93)
+            log_area.insert(tkinter.END, "-" * 93 + f"\n\nTotal Fee : ${total_fee}\n\n" + "-" * 93)
             log_area.see(tkinter.END)
         if total_charge > 0:
             print("-" * 93)
             print(f"\nGrand Total : {grand_total}\n")
-            log_area.insert(tkinter.END,f"\n\nGrand Fee : {grand_total:.2f}\n\n" + "-" * 93)
+            log_area.insert(tkinter.END,f"\n\nGrand Fee : ${grand_total:.2f}\n\n" + "-" * 93)
             log_area.see(tkinter.END)
         print("-" * 93)
         print("Is the bill paid?")
@@ -272,6 +272,15 @@ def run_main(conn):
     # 메인 윈도우의 닫기 프로토콜에 연결
     main.protocol("WM_DELETE_WINDOW", on_closing)
     ######################################
+    def set_focus_force(): # 포커스 강제 조정
+        main.lift()  # 1. 창을 화면 맨 앞으로 끄집어냄
+        main.attributes('-topmost', True)  # 2. 잠시동안 창을 최상위로 고정
+        main.attributes('-topmost', False)  # 3. 고정 해제 (안 그러면 다른 창이 안 덮임)
+        customer_date.focus_force()  # 4. [핵심] 입력창에 강제로 포커스 꽂기!
+
+    # 0.2초(200ms) 뒤에 실행 (화면이 다 그려질 시간 확보)
+    main.after(200, set_focus_force)
+    ######################################
     main.mainloop()
 ######################################
 # Window 자동 중앙 정렬 모듈 (미정렬 시 좌측 상단) (tkinter)
@@ -314,5 +323,6 @@ login_but.bind("<Return>", user_login)
 # padx=[좌측우측외부여백], pady=[상단하단외부여백], ipa~=[내부여백]
 # 상세 정리 : https://puliseul.tistory.com/81
 ######################################
+user_id.focus_set()
 login.mainloop() # root(Window)를 지속적으로 반복 실행 (종료방지)
 ######################################
