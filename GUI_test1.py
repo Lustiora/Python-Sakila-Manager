@@ -273,11 +273,10 @@ def run_main(conn):
     main.protocol("WM_DELETE_WINDOW", on_closing)
     ######################################
     def set_focus_force(): # 포커스 강제 조정
-        main.lift()  # 1. 창을 화면 맨 앞으로 끄집어냄
-        main.attributes('-topmost', True)  # 2. 잠시동안 창을 최상위로 고정
-        main.attributes('-topmost', False)  # 3. 고정 해제 (안 그러면 다른 창이 안 덮임)
-        customer_date.focus_force()  # 4. [핵심] 입력창에 강제로 포커스 꽂기!
-
+        main.lift()  # 창을 화면 맨 앞으로
+        main.attributes('-topmost', True)  # 잠시동안 창을 최상위로 고정
+        main.attributes('-topmost', False)  # 고정 해제 (안 그러면 다른 창이 안 덮임)
+        customer_date.focus_force()  # 입력창 강제 포커스
     # 0.2초(200ms) 뒤에 실행 (화면이 다 그려질 시간 확보)
     main.after(200, set_focus_force)
     ######################################
