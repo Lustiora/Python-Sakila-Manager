@@ -45,3 +45,5 @@ Sakila DB > Read POS (Point of Sales) Simulator
 3. 결제기능 구현 + 연체료와 대여료를 합산하여 결제도 가능 / GUI_test1.py
 4. 전역변수로 필요 데이터 수거 기능 추가 / GUI_test1.py
 5. exe file 생성 `pyinstaller` 및 테스트 / GUI_test1 - 1.exe
+6. **성공**
+7. 구조 변경을 통한 동작 흐름 최적화 / GUI_test2.py
