@@ -1,0 +1,130 @@
+# ---------------------------------------------------------
+# Import Package
+# ---------------------------------------------------------
+import psycopg2
+import tkinter
+from tkinter import messagebox
+import staff_Login
+from window import center_window
+import os # ls %appdata%\sakila\db / mkdir %appdata%\sakila\db
+import configparser # ini Editor
+# ---------------------------------------------------------
+# Save Config Module
+# ---------------------------------------------------------
+def save_config(login_db, login_host, login_port, login_id, login_pw):
+    appdata = os.getenv("APPDATA") # %appdata% 경로 변환
+    config_dir = os.path.join(appdata, "sakila", "db") # 변환된 경로 -> "sakila" -> "db"
+    config_file = os.path.join(config_dir, "config.ini") # config_dir -> "config.ini"
+    print(f"Root : {config_dir}")
+    if os.path.exists(config_dir): # 경로내 파일 유무 확인
+        # load_config(db_db, db_host, db_port, db_id, db_pw)
+        load_config()
+    else:
+        os.makedirs(config_dir, exist_ok=True) # 폴더 생성 | exist_ok=True > 폴더 존재 시 Cancel
+        config = configparser.ConfigParser() # ini Editor 호출
+        config["DB Connect"] = {"dbname": login_db, # 분류 생성
+                                "host": login_host, # "key" : value
+                                "port": login_port,
+                                "user": login_id,
+                                "password": login_pw
+                                }
+        with open(config_file, "w") as configfile: # Export ini
+            config.write(configfile)
+# ---------------------------------------------------------
+# Load Config Module -- 작성중 --
+# ---------------------------------------------------------
+def load_config(db_db, db_host, db_port, db_id, db_pw):
+    appdata = os.getenv("APPDATA")  # %appdata% 경로 변환
+    config_dir = os.path.join(appdata, "sakila", "db")  # 변환된 경로 -> "sakila" -> "db"
+    config_file = os.path.join(config_dir, "config.ini")  # config_dir -> "config.ini"
+    config = configparser.ConfigParser()
+    config.read(config_file) # Read ini
+    db_db.delete(0, tkinter.END)
+    db_host.delete(0, tkinter.END)
+    db_port.delete(0, tkinter.END)
+    db_id.delete(0, tkinter.END)
+    db_pw.delete(0, tkinter.END)
+    db_db = config['dbname']['login_db']
+    db_host = config['host']['login_host']
+    db_port = config['port']['login_port']
+    db_id = config['user']['login_id']
+    db_pw = config['password']['login_pw']
+    # db_connect(db_db, db_host, db_port, db_id, db_pw, event=None)
+# ---------------------------------------------------------
+# Database Connect Module
+# ---------------------------------------------------------
+count = 3
+def db_connect():
+    global count
+    login_db = db_db.get()
+    login_host = db_host.get()
+    login_port = db_port.get()
+    login_id = db_id.get()
+    login_pw = db_pw.get()
+    print(f"ID : {login_id} | PW : {login_pw}")
+    print("DB Connected ...")
+    count = count - 1
+    try:
+        conn = psycopg2.connect(dbname=login_db,
+                                host=login_host, # Default : localhost
+                                port=login_port, # Default : 5432
+                                user=login_id,
+                                password=login_pw)
+        print("Connection Established")
+        save_config(login_db, login_host, login_port, login_id, login_pw) # 연결 성공 시 저장
+        db.destroy()
+        staff_Login.login_gui()
+    except Exception as e:
+        print(f"Not Connected | Chance(3) : {count}\nError : {e}")
+        messagebox.showinfo("DB Connect", f"Not Connected\nChance(3) : {count}")
+        if count == 0:
+            messagebox.showinfo("DB Connect", "Please Contact the Administrator\nPhone : 010-1234-5678")
+            print("Not Connected Time Out")
+            db.destroy()
+# ---------------------------------------------------------
+# DB Connect GUI
+# ---------------------------------------------------------
+if __name__ == "__main__":
+    db = tkinter.Tk()
+    db.title("DB Connect")
+    center_window(db, 260, 220)
+
+# DB Name
+tkinter.Label(db, text="DB Name").grid(row=0, column=0, pady=5, padx=5, sticky="e")
+db_db = tkinter.Entry(db)
+db_db.grid(row=0, column=1, pady=10, padx=5)
+db.grid_columnconfigure(0, weight=1)
+
+# DB Host
+tkinter.Label(db, text="DB Host").grid(row=1, column=0, pady=5, padx=5, sticky="e")
+db_host = tkinter.Entry(db)
+db_host.grid(row=1, column=1, pady=10, padx=5)
+db.grid_columnconfigure(1, weight=1)
+
+# DB Port
+tkinter.Label(db, text="DB Port").grid(row=2, column=0, pady=5, padx=5, sticky="e")
+db_port = tkinter.Entry(db)
+db_port.grid(row=2, column=1, pady=10, padx=5)
+db.grid_columnconfigure(2, weight=1)
+
+# DB Username
+tkinter.Label(db, text="DB Username").grid(row=3, column=0, pady=5, padx=5, sticky="e")
+db_id = tkinter.Entry(db)
+db_id.grid(row=3, column=1, padx=10, pady=5)
+db.grid_columnconfigure(3, weight=1)
+
+# DB Password
+tkinter.Label(db, text="DB Password").grid(row=4, column=0, pady=5, padx=5, sticky="e")
+db_pw = tkinter.Entry(db, show="*")
+db_pw.grid(row=4, column=1, padx=10, pady=5)
+db_pw.bind("<Return>", db_connect)
+db.grid_columnconfigure(4, weight=1)
+
+# DB Connect Button
+db_login_but = tkinter.Button(db, text="DB Connect", command=db_connect)
+db_login_but.grid(row=5, column=0, padx=10, pady=3, columnspan=2, sticky="ew")
+db_login_but.bind("<Return>", db_connect)
+
+db_db.focus_set() # DB Name Focus
+# load_config()
+db.mainloop()
