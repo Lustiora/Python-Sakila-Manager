@@ -9,7 +9,7 @@ from window import center_window
 from window import set_focus_force
 import os # ls %appdata%\sakila\db / mkdir %appdata%\sakila\db
 import configparser # ini Editor
-import base64
+import base64 # base64 Encode/Decode
 # ---------------------------------------------------------
 # Save Config Module
 # ---------------------------------------------------------
