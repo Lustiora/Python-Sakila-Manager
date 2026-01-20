@@ -10,7 +10,7 @@ import os
 import configparser
 import hashlib # 해시값 Encoding
 # ---------------------------------------------------------
-# 변수
+# Variable
 # ---------------------------------------------------------
 count = 3
 current_login_data = None
