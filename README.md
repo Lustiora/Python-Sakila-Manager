@@ -13,6 +13,10 @@
             - 일치 print _DB Connect_ > `2`
             - 불일치 >> Count **-1** Print _Not Connected_
                 - Count == **0** Print _Please Contact the Administrator / Phone : 010-1234-5678_ _End_
+        
+        <img width="674" height="257" alt="스크린샷 2026-01-20 170736" src="https://github.com/user-attachments/assets/1e3ad08c-defb-48db-92ae-0b0bb70a7929" />
+        
+        <img width="265" height="256" alt="스크린샷 2026-01-20 170435" src="https://github.com/user-attachments/assets/86fd1671-5353-4f13-a85b-c828d5bac7f2" />
 
 2. **직원 ID를 확인 (Staff-Table)**
     - Login Count = **3**
@@ -20,6 +24,8 @@
         - 일치 >> `DB Access`
         - 불일치 >> Count **-1** Print _Login Failed / Chance(Count)_
             - Count == **0** Print _Please Contact the Administrator / Phone : 010-1234-5678_ _End_
+    
+    <img width="782" height="214" alt="스크린샷 2026-01-20 170512" src="https://github.com/user-attachments/assets/956b66f3-7f8f-4fae-9522-c4fc8bfb394e" />
 
 ### 2. Customer Check / Return / Rental / Calculation Logic
 
@@ -133,6 +139,9 @@
 <details>
 <summary>Old Basic Logic 1.0</summary>
 
+<img width="271" height="141" alt="스크린샷 2026-01-20 165959" src="https://github.com/user-attachments/assets/2b732a9f-7eb9-4e53-b514-540f517ac469" />
+
+<img width="707" height="437" alt="스크린샷 2026-01-20 170017" src="https://github.com/user-attachments/assets/c2ea61f9-b06a-44d9-9592-cf3a0bfa5a8e" />
 1. **사용자 ID를 확인**
    - 1-1. 대여중/연체중인 DVD가 존재하는 경우 > **3-2**
 
@@ -213,6 +222,7 @@
   5. exe file 생성 `pyinstaller` 및 테스트 / `GUI_test1 - 1.exe`
   6. **성공**
   7. 구조 변경을 통한 동작 흐름 최적화 / `GUI_test2.py`
+    <img width="707" height="437" alt="스크린샷 2026-01-20 170017" src="https://github.com/user-attachments/assets/c2ea61f9-b06a-44d9-9592-cf3a0bfa5a8e" />
 
 * **2026-01-15 (GUI)**
   1. 로그인 화면 구현 및 DB 연결 / `GUI_test1.py`
@@ -221,6 +231,7 @@
   4. `방화벽 포트 개방 5432` 
   5. `QUERY Tool` > `SHOW hba_file;` > `IPv4 local connections 모든 IP 접속 허용`
   6. **성공**
+    <img width="271" height="141" alt="스크린샷 2026-01-20 165959" src="https://github.com/user-attachments/assets/2b732a9f-7eb9-4e53-b514-540f517ac469" />
 
 * **2026-01-14 (CLI)**
   1. 미반납 이력이 존재하는 경우 미반납 이력과 연체 목록, 전체 연체료 출력 , 계산 > rental , film / `CLI_test1.py`
