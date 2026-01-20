@@ -7,7 +7,7 @@
 
 1. [x] **DB 연결정보를 확인**
     - 연결정보가 저장된 INI File 유무 확인
-    - 화이트 리스트만 연결 가능
+    - 화이트 리스트 [...\PostgreSQL\18\data\postgresql.conf, pg_hba.conf](https://github.com/Lustiora/Python-Sakila/wiki/PostgresSQL-Server-White-List)
         - DB Connect Count = **3**
         - 1-1. 해당 정보로 연결시도
             - 일치 print _DB Connect_ > `2`
