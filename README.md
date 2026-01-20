@@ -140,6 +140,7 @@
 <img width="271" height="141" alt="스크린샷 2026-01-20 165959" src="https://github.com/user-attachments/assets/2b732a9f-7eb9-4e53-b514-540f517ac469" />
 
 <img width="707" height="437" alt="스크린샷 2026-01-20 170017" src="https://github.com/user-attachments/assets/c2ea61f9-b06a-44d9-9592-cf3a0bfa5a8e" />
+
 1. **사용자 ID를 확인**
    - 1-1. 대여중/연체중인 DVD가 존재하는 경우 > **3-2**
 
