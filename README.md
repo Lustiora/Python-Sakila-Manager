@@ -13,7 +13,7 @@
             - 일치 print _DB Connect_ > `2`
             - 불일치 >> Count **-1** Print _Not Connected_
                 - Count == **0** Print _Please Contact the Administrator / Phone : 010-1234-5678_ _End_
-        
+        <br>
         <img width="674" height="257" alt="스크린샷 2026-01-20 170736" src="https://github.com/user-attachments/assets/1e3ad08c-defb-48db-92ae-0b0bb70a7929" />
 
 2. [x] **직원 ID를 확인 (Staff-Table)**
@@ -22,7 +22,7 @@
         - 일치 >> `DB Access`
         - 불일치 >> Count **-1** Print _Login Failed / Chance(Count)_
             - Count == **0** Print _Please Contact the Administrator / Phone : 010-1234-5678_ _End_
-    
+    <br>
     <img width="782" height="214" alt="스크린샷 2026-01-20 170512" src="https://github.com/user-attachments/assets/956b66f3-7f8f-4fae-9522-c4fc8bfb394e" />
 
 ### 2. Customer Check / Return / Rental / Calculation Logic
@@ -134,9 +134,11 @@
         - 관리
             - 직원 (Staff-Table)
 
-<details>
-<summary>Old Basic Logic 1.0</summary>
+### Old Basic Logic 1.0
 
+<details>
+<summary>...</summary>
+<br>
 <img width="271" height="141" alt="스크린샷 2026-01-20 165959" src="https://github.com/user-attachments/assets/2b732a9f-7eb9-4e53-b514-540f517ac469" />
 
 <img width="707" height="437" alt="스크린샷 2026-01-20 170017" src="https://github.com/user-attachments/assets/c2ea61f9-b06a-44d9-9592-cf3a0bfa5a8e" />
