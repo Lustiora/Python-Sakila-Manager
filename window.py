@@ -1,9 +1,4 @@
 from screeninfo import get_monitors
-
-from screeninfo import get_monitors
-import tkinter
-
-
 def center_window(window, width, height, resizable=None, min_size=None):
     # 1. 창 정보 업데이트
     window.update_idletasks()
@@ -47,7 +42,7 @@ def center_window(window, width, height, resizable=None, min_size=None):
 
 def center_window_delayed(window, width, height):
     # 기존 center_window 로직 실행 (screeninfo 사용하는 버전)
-    center_window(window, width, height, resizable=False)
+    center_window(window, width, height, resizable=None)
 
     # 위치를 잡은 뒤에 창을 보여줌 (deiconify)
     window.deiconify()
