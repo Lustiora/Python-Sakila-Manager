@@ -209,12 +209,21 @@
 
 ## Workflow
 
-* **2026-01-19**
-  1. Basic Logic 2.0 설계
-  2. DB Connect, INI File Create
+* **2026-01-21**
+  1. Main Window Menubar Create
+  2. Sub Window Frame 구현중
 
 <details>
 <summary>Old Workflow</summary>
+
+* **2026-01-20**
+  1. DB Connect Debug
+  2. DB Connect GUI > Staff Login GUI Connect
+  3. Main Window Create
+
+* **2026-01-19**
+  1. Basic Logic 2.0 설계
+  2. DB Connect GUI, INI File Create
 
 * **2026-01-16 (GUI)**
   1. DVD 목록 검색기능 + 결제 버튼 추가 / `GUI_test1.py`
@@ -243,7 +252,8 @@
   5. 데이터 오염 방지를 위해 DB 직접 저장 **Cancel**
 
 * **2026-01-13 (CLI)**
-  1. 존재하는 사용자인지 아닌지를 확인하며 미반납 이력을 확인 > customer / `CLI_test1.py`
-  2. 존재하는 영화 여부 확인 및 대여기간을 지정하여 대여기간에 따른 대여료 출력 > inventory , film / `CLI_test1.py`
+  1. Basic Logic 1.0 설계
+  2. 존재하는 사용자인지 아닌지를 확인하며 미반납 이력을 확인 > customer / `CLI_test1.py`
+  3. 존재하는 영화 여부 확인 및 대여기간을 지정하여 대여기간에 따른 대여료 출력 > inventory , film / `CLI_test1.py`
 
 </details>
