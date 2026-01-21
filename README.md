@@ -213,6 +213,7 @@
   1. Main Window Menubar Create
   2. Sub Window Frame 구현중
   3. Status Bar 구현중 (DB 접속상태 체크)
+  4. DB Connect 5s Test, Disconnect > db_connect.py link Logic 추가
 
 <details>
 <summary>Old Workflow</summary>
