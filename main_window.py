@@ -22,7 +22,7 @@ current_search_inventory = None
 current_search_film = None
 current_search_rental = None
 current_search_payment = None
-status = []
+check_status = []
 # ---------------------------------------------------------
 # Main Window Module
 # ---------------------------------------------------------
@@ -35,7 +35,7 @@ def run_main(conn, login_db, login_host, login_port):
     global current_search_film
     global current_search_rental
     global current_search_payment
-    global status
+    global check_status
     current_login_data = None
     current_status = None
     current_search_customer = None
@@ -72,7 +72,7 @@ def run_main(conn, login_db, login_host, login_port):
         # --- 가두리(Clamping) 로직 ---
         parent = window.master
         parent_w = parent.winfo_width()
-        parent_h = parent.winfo_height()
+        parent_h = parent.winfo_height() - 30 # Status Bar Height 30
         window_w = window.winfo_width()
         window_h = window.winfo_height()
 
@@ -96,22 +96,6 @@ def run_main(conn, login_db, login_host, login_port):
             current_status.lift()
             return
         # -- Frame --
-        def check_db(conn, status):
-            try:
-                with conn.cursor() as cursor:
-                    cursor.execute("select 1")
-                    status = "Connected"
-                    print("DB Connect Check : Connected")
-                    return status
-            except Exception as e:
-                print(e)
-                status = "Disconnected"
-                return status
-
-        if check_db(conn, status) == "Connected":
-            status_color = "green"
-        else:
-            status_color = "red"
         status_frame = tkinter.Frame(main, width=300, height=300, bg="white", relief="raised", bd=3)
         status_frame.place(x=30, y=30)
         current_status = status_frame
@@ -135,7 +119,20 @@ def run_main(conn, login_db, login_host, login_port):
         tkinter.Label(content_frame, text=login_db, bg="white").grid(row=0, column=1, pady=5, sticky="w")
         tkinter.Label(content_frame, text=login_host, bg="white").grid(row=1, column=1, pady=5, sticky="w")
         tkinter.Label(content_frame, text=login_port, bg="white").grid(row=2, column=1, pady=5, sticky="w")
-        tkinter.Label(content_frame, text=check_db(conn, status), fg=status_color, bg="white").grid(row=3, column=1, pady=5, sticky="w")
+        check_status = tkinter.Label(content_frame, text="Check_Status", fg="white", bg="white")
+        check_status.grid(row=3, column=1, pady=5, sticky="w")
+        def check_db(conn, check_status):
+            try:
+                with conn.cursor() as cursor:
+                    cursor.execute("select 1")
+                    print("DB Connect Check : Connected")
+                    check_status.config(text="Connected", fg="green")
+            except Exception as e:
+                print(e)
+                check_status.config(text = "Disconnected", fg="red")
+            if status_frame.winfo_exists():  # 창이 켜져 있을 때만 예약
+                status_frame.after(5000, lambda: check_db(conn, check_status))
+        check_db(conn, check_status)
         # -- Click Event --
         content_frame.bind("<Button-1>", lambda e: current_status.lift())
         for widget in content_frame.winfo_children(): # 클릭 시 상단 표시, 하위 계층 전파
@@ -423,25 +420,47 @@ def run_main(conn, login_db, login_host, login_port):
         main.focus_force() # 강제 포커스 (Entry or window 지정가능)
     main.after(200, main_focus_force)
     # ---------------------------------------------------------
-    def connect_test(conn):
+    # Status Bar
+    # ---------------------------------------------------------
+    status_frame = tkinter.Frame(main)
+    status_frame.pack(side="bottom", fill="x", padx=5, pady=5)
+    status_frame.configure(bg="gainsboro")
+    status = tkinter.Label(status_frame, text="Status", fg="white", bg="gainsboro") # 하단 모듈에서 status 값을 인자로 받아서 출력하기에 동일하게 명명해야 혼란방지
+    status.pack(side="right")
+    # ---------------------------------------------------------
+    def connect_test(conn, status):
         try:
             print("Test Connected 5s")
             with conn.cursor() as cursor:
                 cursor.execute("select 1")
             print("DB Connect Test : Connected")
+            status.config(text = "Connected", fg = "green") # .config를 사용하여 Label 값 교체 / status 값을 외부로 반출
         except Exception as e:
+            status.config(text="Disconnected", fg="red")
             print(f"Error: {e}")
-            if messagebox.askokcancel("Error", "Disconnected\nRestart?"):
+            if messagebox.askokcancel("Error", "Disconnected\nProgram Restart?"):
                 main.destroy()
-                from db_connect import run_db_connect
-                os.system("python db_connect.py")
-                print("Restart DB Connect")
-                return  # 재시작했으면 더 이상 예약하지 않고 종료
+                if getattr(sys, 'frozen', False): # exe 패키지 구동시 실행 조건
+                    print("Restarting Executable...")
+                    application_path = sys.executable
+                    os.execv(application_path, [application_path])
+                else: # 개발 환경 실행 조건
+                    current_dir = os.path.dirname(os.path.abspath(__file__))
+                    target_file = os.path.join(current_dir, "db_connect.py")
+                    my_env = os.environ.copy() # 환경변수 설정
+                    if "PYTHONPATH" in my_env:
+                        my_env["PYTHONPATH"] = current_dir + os.pathsep + my_env["PYTHONPATH"]
+                    else:
+                        my_env["PYTHONPATH"] = current_dir
+                    os.environ.update(my_env) # 현재 환경변수 업데이트
+                    print("Restarting via os.execv...")
+                    os.execv(sys.executable, [sys.executable, target_file]) # 현재 프로세스를 죽이고, 그 자리에서 새 파이썬을 실행 / 인자: (실행파일 경로, [실행파일경로, 스크립트파일])
+            return  # 종료
         if main.winfo_exists():  # 창이 켜져 있을 때만 예약
-            main.after(5000, lambda: connect_test(conn))
+            main.after(5000, lambda: connect_test(conn, status))
     # ---------------------------------------------------------
-    connect_test(conn)
-
+    connect_test(conn,status)
+    # main.deiconify() # Window OS 동작 이상 시 주석 해제
     main.after(10, lambda: center_window_delayed(main, 1024, 768))
     main.mainloop()
 # ---------------------------------------------------------
