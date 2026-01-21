@@ -263,7 +263,7 @@ def run_main(conn):
         main.lift()  # 창을 화면 맨 앞으로
         main.attributes('-topmost', True)  # 잠시동안 창을 최상위로 고정
         main.attributes('-topmost', False)  # 고정 해제 (안 그러면 다른 창이 안 덮임)
-        customer_date.focus_force()  # 입력창 강제 포커스
+        customer_date.focus_force()  # 강제 포커스 (Entry or window 지정가능)
     main.after(200, set_focus_force) # 0.2초(200ms) 뒤에 실행 (화면이 다 그려질 시간 확보)
     main.mainloop()
 
