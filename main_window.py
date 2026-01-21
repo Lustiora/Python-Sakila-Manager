@@ -6,7 +6,7 @@ import sys
 import tkinter
 from tkinter import messagebox
 from window import center_window
-from window import set_focus_force
+from window import center_window_delayed
 import os
 import configparser
 import hashlib # 해시값 Encoding
@@ -45,6 +45,7 @@ def run_main(conn, login_db, login_host, login_port):
     current_search_payment = None
     # -- Main --
     main = tkinter.Tk()
+    main.withdraw()
     main.title("Sakila")
     center_window(main, 1024, 768, min_size=(1024,768))# -- DB 유령 연결 방지 --
     def on_closing():
@@ -440,6 +441,8 @@ def run_main(conn, login_db, login_host, login_port):
             main.after(5000, lambda: connect_test(conn))
     # ---------------------------------------------------------
     connect_test(conn)
+
+    main.after(10, lambda: center_window_delayed(main, 1024, 768))
     main.mainloop()
 # ---------------------------------------------------------
 # Check Login Process Module

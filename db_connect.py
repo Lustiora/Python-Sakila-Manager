@@ -6,6 +6,7 @@ import sys
 import tkinter
 from tkinter import messagebox
 from window import center_window
+from window import center_window_delayed
 from window import set_focus_force
 import os # ls %appdata%\sakila\db / mkdir %appdata%\sakila\db
 import configparser # ini Editor
@@ -123,46 +124,51 @@ def db_connect(event=None):
 def run_db_connect():
     global db, db_db, db_host, db_port, db_id, db_pw
     db = tkinter.Tk()
+    db.withdraw()
     db.title("DB Connect")
-    center_window(db, 260, 220, resizable=False)
+    center_window(db, 300, 240, resizable=False)
+
+    tkinter.Label(db).grid(row=0, column=0, pady=0, padx=0)
 
     # DB Name
-    tkinter.Label(db, text="DB Name").grid(row=0, column=0, pady=5, padx=5, sticky="e")
+    tkinter.Label(db, text="DB Name").grid(row=1, column=0, pady=5, padx=5, sticky="e")
     db_db = tkinter.Entry(db)
-    db_db.grid(row=0, column=1, pady=10, padx=5)
-    db.grid_columnconfigure(0, weight=1)
+    db_db.grid(row=1, column=1, pady=5, padx=5)
 
     # DB Host
-    tkinter.Label(db, text="DB Host").grid(row=1, column=0, pady=5, padx=5, sticky="e")
+    tkinter.Label(db, text="DB Host").grid(row=2, column=0, pady=5, padx=5, sticky="e")
     db_host = tkinter.Entry(db)
-    db_host.grid(row=1, column=1, pady=10, padx=5)
-    db.grid_columnconfigure(1, weight=1)
+    db_host.grid(row=2, column=1, pady=5, padx=5)
+
 
     # DB Port
-    tkinter.Label(db, text="DB Port").grid(row=2, column=0, pady=5, padx=5, sticky="e")
+    tkinter.Label(db, text="DB Port").grid(row=3, column=0, pady=5, padx=5, sticky="e")
     db_port = tkinter.Entry(db)
-    db_port.grid(row=2, column=1, pady=10, padx=5)
-    db.grid_columnconfigure(2, weight=1)
+    db_port.grid(row=3, column=1, pady=5, padx=5)
 
     # DB Username
-    tkinter.Label(db, text="DB Username").grid(row=3, column=0, pady=5, padx=5, sticky="e")
+    tkinter.Label(db, text="DB Username").grid(row=4, column=0, pady=5, padx=5, sticky="e")
     db_id = tkinter.Entry(db)
-    db_id.grid(row=3, column=1, padx=10, pady=5)
-    db.grid_columnconfigure(3, weight=1)
+    db_id.grid(row=4, column=1, pady=5, padx=5)
 
     # DB Password
-    tkinter.Label(db, text="DB Password").grid(row=4, column=0, pady=5, padx=5, sticky="e")
+    tkinter.Label(db, text="DB Password").grid(row=5, column=0, pady=5, padx=5, sticky="e")
     db_pw = tkinter.Entry(db, show="*")
-    db_pw.grid(row=4, column=1, padx=10, pady=5)
+    db_pw.grid(row=5, column=1, pady=5, padx=5)
     db_pw.bind("<Return>", db_connect)
-    db.grid_columnconfigure(4, weight=1)
 
     # DB Connect Button
     db_login_but = tkinter.Button(db, text="DB Connect", command=db_connect)
-    db_login_but.grid(row=5, column=0, padx=10, pady=3, columnspan=2, sticky="ew")
+    db_login_but.grid(row=6, column=0, pady=5, padx=10, columnspan=2, sticky="ew")
     db_login_but.bind("<Return>", db_connect)
 
+    # Array Middle
+    db.grid_columnconfigure(0, weight=1)
+    db.grid_columnconfigure(1, weight=1)
+
     load_config()
+
+    db.after(10, lambda: center_window_delayed(db, 300, 240))
 
     db_db.focus_set() # DB Name Focus
 

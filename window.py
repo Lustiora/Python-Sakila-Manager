@@ -1,18 +1,56 @@
-def center_window(window, width, height, resizable = None, min_size = None): # Window 자동 중앙 정렬 모듈 (미정렬 시 좌측 상단) (tkinter)
-    screen_width = window.winfo_screenwidth() # 현재 모니터의 해상도(크기)를 가져옴
-    screen_height = window.winfo_screenheight()
-    x_pos = (screen_width // 2) - (width // 2) # 정중앙 좌표 계산 \ (//)는 정수 나누기
-    y_pos = (screen_height // 2) - (height // 2)
-    window.geometry(f"{width}x{height}+{x_pos}+{y_pos}") # 위치 적용 (가로x세로+X좌표+Y좌표)
+from screeninfo import get_monitors
+
+from screeninfo import get_monitors
+import tkinter
+
+
+def center_window(window, width, height, resizable=None, min_size=None):
+    # 1. 창 정보 업데이트
+    window.update_idletasks()
+
+    target_monitor = None
+    monitors = get_monitors()
+
+    # 2. '주 모니터(Primary)'를 찾아서 고정 타겟으로 설정
+    for m in monitors:
+        if m.is_primary:
+            target_monitor = m
+            break
+
+    # 만약 주 모니터 감지에 실패했다면(Linux 드라이버 특성 등), 무조건 첫 번째 모니터 사용
+    if target_monitor is None and len(monitors) > 0:
+        target_monitor = monitors[0]
+
+    # 3. 좌표 계산 (선택된 모니터의 중앙)
+    if target_monitor:
+        x_pos = target_monitor.x + (target_monitor.width // 2) - (width // 2)
+        y_pos = target_monitor.y + (target_monitor.height // 2) - (height // 2)
+    else:
+        # 정말 만약에 모니터 정보를 아예 못 가져왔을 경우 (안전장치)
+        screen_width = window.winfo_screenwidth()
+        screen_height = window.winfo_screenheight()
+        x_pos = (screen_width // 2) - (width // 2)
+        y_pos = (screen_height // 2) - (height // 2)
+
+    # 4. 적용
+    window.geometry(f"{width}x{height}+{x_pos}+{y_pos}")
+
+    # 옵션 설정 (기존과 동일)
     if resizable is not None:
-        if isinstance(resizable, bool): # 입력값이 True/False 하나라면 가로/세로 똑같이 적용
+        if isinstance(resizable, bool):
             window.resizable(resizable, resizable)
-        else: # 입력값이 (True, False) 처럼 튜플/리스트라면 각각 적용
+        else:
             window.resizable(resizable[0], resizable[1])
-    if min_size is not None: # 최소 해상도 지정 (더 이상 작아지지 않음)
-        # min_size=(너비, 높이) 튜플 형태로 입력받음
+
+    if min_size is not None:
         window.minsize(min_size[0], min_size[1])
-# 적용 > center_window([tkinter Window],[width],[height],[resizable = True, False],[min_size = 가로,세로])
+
+def center_window_delayed(window, width, height):
+    # 기존 center_window 로직 실행 (screeninfo 사용하는 버전)
+    center_window(window, width, height, resizable=False)
+
+    # 위치를 잡은 뒤에 창을 보여줌 (deiconify)
+    window.deiconify()
 
 def set_focus_force(main, entry):  # 포커스 강제 조정
     main.lift()  # 창을 화면 맨 앞으로

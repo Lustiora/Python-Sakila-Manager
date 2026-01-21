@@ -6,6 +6,7 @@ import sys
 import tkinter
 from tkinter import messagebox
 from window import center_window
+from window import center_window_delayed
 from window import set_focus_force
 import os
 import configparser
@@ -27,22 +28,25 @@ def staff_login_gui():
     global username
     global password
     login = tkinter.Tk() # 표사되는 Window(tkinter.Tk())에 변수명을 지정하여 변수명을 기준으로 속성을 추가
+    login.withdraw() # Window 생성 다음에 숨겨야 글리치 현상 방지가능
     login.title("Staff Login")
-    center_window(login, 260, 100, resizable=False)
+    center_window(login, 260, 150, resizable=False)
 
-    tkinter.Label(login, text="Username").grid(row=0, column=0, padx=5, pady=5, sticky="e")
+    tkinter.Label(login).grid(row=0, column=0, padx=0, pady=0)
+    tkinter.Label(login, text="Username").grid(row=1, column=0, padx=5, pady=6, sticky="e")
     username = tkinter.Entry(login) # Entry -> 입력칸 | 입력된 값을 사용하기 위해 변수명 지정 필요
-    username.grid(row=0, column=1, padx=10, pady=5)
-    login.grid_columnconfigure(0, weight=1) # ([열],[배당 비율])
-    tkinter.Label(login, text="Password").grid(row=1, column=0, padx=5, pady=5, sticky="e")
+    username.grid(row=1, column=1, padx=10, pady=6)
+    tkinter.Label(login, text="Password").grid(row=2, column=0, padx=5, pady=6, sticky="e")
     password = tkinter.Entry(login, show="*") # show="*" > 유출 방지 : 입력값 * 대체 출력
-    password.grid(row=1, column=1, padx=10, pady=5)
+    password.grid(row=2, column=1, padx=10, pady=6)
     password.bind("<Return>", check_login_process) # Enter key 입력으로 Login 모듈 동작 ("[입력키]", [모듈])
-    login.grid_columnconfigure(1, weight=1)
     login_but = tkinter.Button(login, text="Login", command=check_login_process)
-    login_but.grid(row=2, column=0, columnspan=2, padx=10, pady=3, sticky="ew") # command=[클릭시 동작내용] | sticky="e" > 우측 정렬
+    login_but.grid(row=3, column=0, columnspan=2, padx=10, pady=3, sticky="ew") # command=[클릭시 동작내용] | sticky="e" > 우측 정렬
     login_but.bind("<Return>", check_login_process)
+    login.grid_columnconfigure(0, weight=1) # ([열],[배당 비율])
+    login.grid_columnconfigure(1, weight=1)
 
+    login.after(10, lambda: center_window_delayed(login, 260, 150))
     login.after(200, set_focus_force, login, username) # set_focus_force(login, user_id)
     login.mainloop() # root(Window)를 지속적으로 반복 실행 (종료방지)
 # ---------------------------------------------------------
