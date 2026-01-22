@@ -189,9 +189,9 @@
 * Sakila DB를 재확인한 결과 상상이상으로 많은 데이터가 정리되어있음을 확인하여 **새로운 Logic의 필요성을 확인**
   * Old
     * 관리자확인 > 고객확인 > 대여이력확인 > 재고확인 > 결제
+  * New
     * 대여 가능 기간, 그에 따른 대여 비용은 사전에 정의되어있음
     * 관리자확인을 대신하는 Staff Table
-  * New
     * 특정 폴더에 로그와 psycopg2.connect 정보를 저장하는(이후 정보) ini 파일 생성
       * 실행시 특정 폴더에 정보 ini 파일이 없는 경우 로그인 Window 실행 전 psycopg2.connect 정보를 입력하는 Window 실행하고 저장 > (Host, User, ...)
       * 정보 ini 파일이 있는경우 바로 로그인 Window 실행 > (Staff Table)
