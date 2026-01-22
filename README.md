@@ -222,7 +222,7 @@
   Windows는 프로그램이 종료되었다고 생각하여 임시폴더를 삭제하고 환경변수, 임시폴더위치는 상속되어
   실행되지 않고 에러 발생
   
-  Linux Compile Test 필요
+  Linux Compile Test >> Clear
   ```
   7. Windows Sandbox Test >> **Clear**
 
