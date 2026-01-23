@@ -55,3 +55,32 @@ def set_focus_force(main, entry):  # 포커스 강제 조정
 
 # from Window import set_focus_force
 # login.after(200, set_focus_force, login, user_id) # set_focus_force(login, user_id)
+
+# ---------------------------------------------------------
+# Sub Frame
+# ---------------------------------------------------------
+def start_move(event, window):
+    # event.x_root는 모니터 전체 기준 마우스 위치입니다. (절대 좌표)
+    # 윈도우의 현재 위치와 마우스 위치의 차이(Offset)를 저장합니다.
+    window.start_x = event.x_root - window.winfo_x()
+    window.start_y = event.y_root - window.winfo_y()
+
+    window.lift() # 선택시 상단 출력
+
+def on_drag(event, window): # 마우스가 움직인 절대 좌표에서, 아까 저장한 차이만큼 뺍니다.
+    x = event.x_root - window.start_x
+    y = event.y_root - window.start_y
+
+    # --- 가두리(Clamping) 로직 ---
+    parent = window.master
+    parent_w = parent.winfo_width()
+    parent_h = parent.winfo_height() - 30 # Status Bar Height 30
+    window_w = window.winfo_width()
+    window_h = window.winfo_height()
+
+    if x < 0: x = 0
+    if y < 0: y = 0
+    if x + window_w > parent_w: x = parent_w - window_w
+    if y + window_h > parent_h: y = parent_h - window_h
+
+    window.place(x=x, y=y)
