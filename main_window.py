@@ -196,13 +196,24 @@ def run_main(conn, login_db, login_host, login_port):
     menu5.add_separator()
     menu5.add_command(label="장르", command=lambda: add_category_frame(main))
     menubar.add_cascade(label="추가", menu=menu5)
-    # -- Menubar 6 (Stats) --
+    # -- Menubar 6 (Manage) --
     menu6 = tkinter.Menu(menubar, **menu_theme)
-    menubar.add_cascade(label="통계", menu=menu6)
-    # -- Menubar 7 (Manage) --
-    menu7 = tkinter.Menu(menubar, **menu_theme)
-    menu7.add_command(label="직원")
-    menubar.add_cascade(label="관리", menu=menu7)
+    menu6.add_command(label="직원")
+    menu6.add_separator()
+    menu6.add_command(label="통계")
+    menubar.add_cascade(label="관리", menu=menu6)
+    # # -- Menubar 7 (Theme) --
+    # menu7 = tkinter.Menu(menubar, **menu_theme)
+    # menu7.add_command(label="Corporate_Blue")
+    # menu7.add_separator()
+    # menu7.add_command(label="Dark_Pro")
+    # menu7.add_separator()
+    # menu7.add_command(label="Warm_Latte")
+    # menu7.add_separator()
+    # menu7.add_command(label="Forest_Calm")
+    # menu7.add_separator()
+    # menu7.add_command(label="Modern_Mono")
+    # menubar.add_cascade(label="테마", menu=menu7)
     # -- Menubar End --
     menubar.config(bg=Colors.primary, fg="white")
     main.config(menu=menubar)
