@@ -220,6 +220,13 @@
 
 ## Workflow
 
+* **2026-01-23**
+  1. Menubar Module 별도 py 분리 (Sub Frame search)
+  2. Window Module start_move, on_drag 이전
+
+<details>
+<summary>Old Workflow</summary>
+
 * **2026-01-22**
   1. Status Bar 구현 (DB 접속상태 5s 체크)
   2. Linux 호환 설정 DB Disconnect Restart Debug
@@ -243,10 +250,6 @@
   Linux Compile Test >> Clear
   ```
   7. Windows Sandbox Test >> **Clear** 
-
-
-<details>
-<summary>Old Workflow</summary>
 
 * **2026-01-21**
   1. Main Window Menubar Create
