@@ -8,12 +8,11 @@
 1. [x] **DB 연결정보를 확인**
     - 연결정보가 저장된 INI File 유무 확인
     - 화이트 리스트 [...\PostgreSQL\18\data\postgresql.conf, pg_hba.conf](https://github.com/Lustiora/Python-Sakila/wiki/PostgresSQL-Server-White-List)
-        - ~DB Connect Count = **3**~
+        - DB Connect Count = **3**
         - 1-1. 해당 정보로 연결시도
             - 일치 print _DB Connect_ > `2`
-            - ~불일치 >> Count **-1** Print _Not Connected_~
-                - ~Count == **0** Print _Please Contact the Administrator / Phone : 010-1234-5678_ _End_~
-                - Count 제거 / 연결 실패 사유 표시만으로 충분
+            - 불일치 >> Count **-1** Print _Not Connected_
+                - Count == **0** Print _Please Contact the Administrator / Phone : 010-1234-5678_ _End_
         <br>
         <img width="674" height="257" alt="스크린샷 2026-01-20 170736" src="https://github.com/user-attachments/assets/1e3ad08c-defb-48db-92ae-0b0bb70a7929" />
 
@@ -24,8 +23,7 @@
         - 불일치 >> Count **-1** Print _Login Failed / Chance(Count)_
             - Count == **0** Print _Please Contact the Administrator / Phone : 010-1234-5678_ _End_
     <br>
-            - Left <Tkinter> -- Middle <Customtkinter> & Dark Theme -- Right <Customtkinter> & Basic Theme
-    <img width="831" height="238" alt="Screenshot_20260124_142020" src="https://github.com/user-attachments/assets/98578567-67f3-49d1-b651-4901f262644b" />
+    <img width="782" height="214" alt="스크린샷 2026-01-20 170512" src="https://github.com/user-attachments/assets/956b66f3-7f8f-4fae-9522-c4fc8bfb394e" />
 
 ### 2. Customer Check / Return / Rental / Calculation Logic
 
@@ -222,22 +220,15 @@
 
 ## Workflow
 
-* **2026-01-24**
-  1. subFrame 잔상 발생 X (Linux)
-  2. DB Connect Count Delete
-  3. `pyinstaller -F -w -n Linux_Sakila_Basic_Logic_2_4_1 db_connect.py` customtkinter 호환성 문제없음 확인
-  4. Main Window > Status Frame Close Button [Padx=1] Plus
-
-<details>
-<summary>Old Workflow</summary>
-
 * **2026-01-23**
   1. Menubar Module 별도 py 분리 (Sub Frame search, change, delete, add)
   2. Window Module start_move, on_drag 이전
   3. Menubar Status_Frame Login Staff 표시 staff_login > main_window
   4. 차후 테마 적용을 위한 Theme 
   5. tkinter > customtkinter 변환
-  6. subFrame 겹칠 시 잔상이 발생 (Windows)
+
+<details>
+<summary>Old Workflow</summary>
 
 * **2026-01-22**
   1. Status Bar 구현 (DB 접속상태 5s 체크)
