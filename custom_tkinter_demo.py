@@ -3,85 +3,86 @@ import customtkinter
 import sys
 
 
-# ==============================================================================
-# [모듈 1] 슬라이더 스크롤 지원 클래스 (ScrollableSliderMixin)
-# 기능: CTkSlider 위젯에 마우스 휠 스크롤 기능을 추가하여 값을 조절할 수 있게 합니다.
-# 사용법:
-#   1. 이 클래스를 메인 앱 클래스에 상속받으세요. (class App(..., ScrollableSliderMixin))
-#   2. 슬라이더 생성 후 self.setup_slider_scroll(슬라이더_변수)를 호출하세요.
-# ==============================================================================
-class ScrollableSliderMixin:
-    def setup_slider_scroll(self, slider, step=0.05):
-        """
-        [설정 함수] 슬라이더에 마우스 진입/이탈 이벤트를 연결합니다.
-        마우스가 슬라이더 위에 있을 때만 휠 기능을 활성화하여, 전체 스크롤과 충돌을 방지합니다.
-        :param slider: 기능을 적용할 CTkSlider 객체
-        :param step: 휠 1칸당 움직일 값 (기본값 0.05, number_of_steps가 있으면 자동 보정됨)
-        """
-        # 마우스가 슬라이더 위에 올라갔을 때(<Enter>) -> 스크롤 제어 함수 연결
-        slider.bind("<Enter>", lambda e: self._bind_scroll(slider, step))
-        # 마우스가 슬라이더 밖으로 나갔을 때(<Leave>) -> 스크롤 제어 해제 (전체 화면 스크롤 복구)
-        slider.bind("<Leave>", lambda e: self._unbind_scroll(slider))
-
-    def _bind_scroll(self, slider, step):
-        """ [내부 함수] 운영체제별 마우스 휠 이벤트를 슬라이더 조작 함수에 연결(Bind)합니다. """
-        # Windows/MacOS 용 휠 이벤트
-        slider.bind("<MouseWheel>", lambda e: self._on_scroll(e, slider, step))
-        # Linux 용 휠 이벤트 (Button-4: 위로, Button-5: 아래로)
-        slider.bind("<Button-4>", lambda e: self._on_scroll(e, slider, step))
-        slider.bind("<Button-5>", lambda e: self._on_scroll(e, slider, step))
-
-    def _unbind_scroll(self, slider):
-        """ [내부 함수] 연결된 마우스 휠 이벤트를 해제(Unbind)합니다. """
-        slider.unbind("<MouseWheel>")
-        slider.unbind("<Button-4>")
-        slider.unbind("<Button-5>")
-
-    def _on_scroll(self, event, slider, step):
-        """ [작동 원리] 휠 이벤트 발생 시, 실제 값을 계산하고 슬라이더에 적용합니다. """
-        current_val = slider.get()
-
-        # 슬라이더의 설정값(최소, 최대, 단계 수)을 안전하게 가져옵니다. (버전 호환성 확보)
-        # getattr를 사용하여 '_from_' 속성이 없으면 '_from'을 찾는 식입니다.
-        min_val = getattr(slider, '_from', getattr(slider, '_from_', 0))
-        max_val = getattr(slider, '_to', getattr(slider, '_to', 1))
-        steps = getattr(slider, '_number_of_steps', None)
-
-        # '단계(Steps)'가 설정된 슬라이더인 경우, 휠 1칸당 이동량을 단계 크기에 맞춥니다.
-        # 예: 0~1 사이 4단계라면 한 칸에 0.25씩 움직여야 자연스럽습니다.
-        if steps is not None and steps > 0:
-            step_size = (max_val - min_val) / steps
-            # 기본 설정된 step(0.05)보다 계산된 step_size가 크면 교체합니다.
-            if step_size > step:
-                step = step_size
-
-        new_val = current_val
-
-        # 휠 방향 감지 및 값 계산
-        # Windows/Mac: event.delta (양수=위/증가, 음수=아래/감소)
-        # Linux: event.num (4=위, 5=아래)
-        if event.num == 4 or event.delta > 0:
-            new_val = current_val + step
-        elif event.num == 5 or event.delta < 0:
-            new_val = current_val - step
-
-        # 계산된 값이 최소/최대 범위를 벗어나지 않도록 보정(Clamping)
-        new_val = max(min_val, min(max_val, new_val))
-
-        # 값 적용
-        slider.set(new_val)
-
-        # 슬라이더에 연결된 command 함수가 있다면 실행 (예: 프로그레스바 연동 등)
-        if slider._command:
-            slider._command(new_val)
-
+# # ==============================================================================
+# # [모듈 1] 슬라이더 스크롤 지원 클래스 (ScrollableSliderMixin)
+# # 기능: CTkSlider 위젯에 마우스 휠 스크롤 기능을 추가하여 값을 조절할 수 있게 합니다.
+# # 사용법:
+# #   1. 이 클래스를 메인 앱 클래스에 상속받으세요. (class App(..., ScrollableSliderMixin))
+# #   2. 슬라이더 생성 후 self.setup_slider_scroll(슬라이더_변수)를 호출하세요.
+# # ==============================================================================
+# class ScrollableSliderMixin:
+#     def setup_slider_scroll(self, slider, step=0.05):
+#         """
+#         [설정 함수] 슬라이더에 마우스 진입/이탈 이벤트를 연결합니다.
+#         마우스가 슬라이더 위에 있을 때만 휠 기능을 활성화하여, 전체 스크롤과 충돌을 방지합니다.
+#         :param slider: 기능을 적용할 CTkSlider 객체
+#         :param step: 휠 1칸당 움직일 값 (기본값 0.05, number_of_steps가 있으면 자동 보정됨)
+#         """
+#         # 마우스가 슬라이더 위에 올라갔을 때(<Enter>) -> 스크롤 제어 함수 연결
+#         slider.bind("<Enter>", lambda e: self._bind_scroll(slider, step))
+#         # 마우스가 슬라이더 밖으로 나갔을 때(<Leave>) -> 스크롤 제어 해제 (전체 화면 스크롤 복구)
+#         slider.bind("<Leave>", lambda e: self._unbind_scroll(slider))
+#
+#     def _bind_scroll(self, slider, step):
+#         """ [내부 함수] 운영체제별 마우스 휠 이벤트를 슬라이더 조작 함수에 연결(Bind)합니다. """
+#         # Windows/MacOS 용 휠 이벤트
+#         slider.bind("<MouseWheel>", lambda e: self._on_scroll(e, slider, step))
+#         # Linux 용 휠 이벤트 (Button-4: 위로, Button-5: 아래로)
+#         slider.bind("<Button-4>", lambda e: self._on_scroll(e, slider, step))
+#         slider.bind("<Button-5>", lambda e: self._on_scroll(e, slider, step))
+#
+#     def _unbind_scroll(self, slider):
+#         """ [내부 함수] 연결된 마우스 휠 이벤트를 해제(Unbind)합니다. """
+#         slider.unbind("<MouseWheel>")
+#         slider.unbind("<Button-4>")
+#         slider.unbind("<Button-5>")
+#
+#     def _on_scroll(self, event, slider, step):
+#         """ [작동 원리] 휠 이벤트 발생 시, 실제 값을 계산하고 슬라이더에 적용합니다. """
+#         current_val = slider.get()
+#
+#         # 슬라이더의 설정값(최소, 최대, 단계 수)을 안전하게 가져옵니다. (버전 호환성 확보)
+#         # getattr를 사용하여 '_from_' 속성이 없으면 '_from'을 찾는 식입니다.
+#         min_val = getattr(slider, '_from', getattr(slider, '_from_', 0))
+#         max_val = getattr(slider, '_to', getattr(slider, '_to', 1))
+#         steps = getattr(slider, '_number_of_steps', None)
+#
+#         # '단계(Steps)'가 설정된 슬라이더인 경우, 휠 1칸당 이동량을 단계 크기에 맞춥니다.
+#         # 예: 0~1 사이 4단계라면 한 칸에 0.25씩 움직여야 자연스럽습니다.
+#         if steps is not None and steps > 0:
+#             step_size = (max_val - min_val) / steps
+#             # 기본 설정된 step(0.05)보다 계산된 step_size가 크면 교체합니다.
+#             if step_size > step:
+#                 step = step_size
+#
+#         new_val = current_val
+#
+#         # 휠 방향 감지 및 값 계산
+#         # Windows/Mac: event.delta (양수=위/증가, 음수=아래/감소)
+#         # Linux: event.num (4=위, 5=아래)
+#         if event.num == 4 or event.delta > 0:
+#             new_val = current_val + step
+#         elif event.num == 5 or event.delta < 0:
+#             new_val = current_val - step
+#
+#         # 계산된 값이 최소/최대 범위를 벗어나지 않도록 보정(Clamping)
+#         new_val = max(min_val, min(max_val, new_val))
+#
+#         # 값 적용
+#         slider.set(new_val)
+#
+#         # 슬라이더에 연결된 command 함수가 있다면 실행 (예: 프로그레스바 연동 등)
+#         if slider._command:
+#             slider._command(new_val)
+#
 
 # ==============================================================================
 # [모듈 2] 메인 어플리케이션 클래스 (App)
 # 기능: 전체 UI 레이아웃을 구성하고 각 위젯을 배치합니다.
 # 구조: 사이드바(좌측), 메인 콘텐츠(중앙/우측)로 나뉜 그리드 레이아웃을 사용합니다.
 # ==============================================================================
-class App(customtkinter.CTk, ScrollableSliderMixin):
+# class App(customtkinter.CTk, ScrollableSliderMixin):
+class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
@@ -291,10 +292,10 @@ class App(customtkinter.CTk, ScrollableSliderMixin):
         self.checkbox_3 = customtkinter.CTkCheckBox(master=self.checkbox_slider_frame)
         self.checkbox_3.grid(row=3, column=0, pady=20, padx=20, sticky="n")
 
-        # [설정 적용] 슬라이더에 마우스 휠 스크롤 기능 연결
-        # ScrollableSliderMixin의 메서드 호출
-        self.setup_slider_scroll(self.slider_1, step=0.05)
-        self.setup_slider_scroll(self.slider_2, step=0.05)
+        # # [설정 적용] 슬라이더에 마우스 휠 스크롤 기능 연결
+        # # ScrollableSliderMixin의 메서드 호출
+        # self.setup_slider_scroll(self.slider_1, step=0.05)
+        # self.setup_slider_scroll(self.slider_2, step=0.05)
 
         # [초기값 설정] 각 위젯의 기본값 및 상태 설정
         self.sidebar_button_3.configure(state="disabled", text="Disabled CTkButton")

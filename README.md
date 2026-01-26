@@ -232,6 +232,15 @@
   2. flet(0.28.3)을 사용하여 웹, 앱 호환성 해결을 위한 변환작업 진행중 (DB Connect > Main Window 연결 완료)
   <br>(0.80.3 >> Script End Monitor Brightness "0" Issue)
   <br>https://flet-controls-gallery.fly.dev/
+  3. Linux Flet 호환성 옵션 추가 (최소 최대값을 지정하여 Window Size 강제)
+    ```bash
+    page.window.min_width = page.window.width
+    page.window.min_height = page.window.height
+    page.window.max_width = page.window.min_width
+    page.window.max_height = page.window.min_height
+    ```
+  4. Exit Popup 추가 `page.window.prevent_close = True ~ event`
+  <br>Linux > `e.page.window.destroy()`
 
 <details>
 <summary>Old Workflow</summary>

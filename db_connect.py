@@ -148,6 +148,29 @@ def run_db_connect(page: flet.Page):
     page.title = "DB Connect" # 창 타이틀
     page.window.width = 400 # 창 가로
     page.window.height = 310 # 창 세로
+    # -- Linux Window Force Size --
+    page.window.min_width = page.window.width
+    page.window.min_height = page.window.height
+    page.window.max_width = page.window.min_width
+    page.window.max_height = page.window.min_height
+    # -- Exit --
+    page.window.prevent_close = True  # X X 이벤트 옵션 추가
+    def close_pop(e):
+        e.page.close(main_quit)  # 팝업창 종료 명령어
+    def close_main(e):
+        e.page.window.close()
+        e.page.window.destroy()  # 윈도우 창 종료 명령어
+    main_quit = flet.AlertDialog(
+        title=flet.Text("Quit"),
+        content=flet.Text("Exit?"),
+        actions=[flet.TextButton("OK", on_click=close_main),
+                 flet.TextButton("Cancel", on_click=close_pop)
+                 ], actions_alignment=flet.MainAxisAlignment.END)
+    def window_event(e):
+        if e.data == "close":
+            e.page.open(main_quit)
+    page.window.on_event = window_event
+    # -- -- -- -- -- -- -- -- -- --
     page.window.resizable = False # 창 크기 변환 금지
     page.window.center() # 모니터 정중앙 출력
     # -- Label --
