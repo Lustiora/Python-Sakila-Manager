@@ -8,6 +8,7 @@ def menu_bar():
         e.page.close(main_quit)  # 팝업창 종료 명령어
     def close_main(e):
         e.page.window.close()  # 윈도우 창 종료 명령어
+        e.page.window.destroy()
     main_quit = flet.AlertDialog(
         title=flet.Text("Quit"),
         content=flet.Text("Exit?"),
