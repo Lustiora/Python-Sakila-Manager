@@ -202,7 +202,7 @@ def run_db_connect(page: flet.Page):
     db_username = flet.Text(value="Username")
     db_password = flet.Text(value="Password")
     # -- Entry --
-    db = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10)
+    db = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10, autofocus=True)
     host = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=40)
     port = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=6)
     username = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10)
