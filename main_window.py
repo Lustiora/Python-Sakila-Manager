@@ -1,5 +1,5 @@
 # -- Import --
-import flet
+import flet, time
 from db_monitor import connect_test
 from nav_tile import nav
 # -- Variable --
@@ -14,16 +14,18 @@ def staff_user_id(user_id, store):
     return staff_user, staff_store
 def run_main(page: flet.Page, conn):
     # -- Frame --
+    page.clean()
     page.title = "Sakila"
-    page.window.width = 1024
-    page.window.height = 768
     page.bgcolor = flet.Colors.BLUE_GREY_50
-    page.update()
+    page.vertical_alignment = flet.MainAxisAlignment.START
     page.window.resizable = True
+    page.window.width = 1280
+    page.window.height = 720
     page.window.min_width = page.window.width
     page.window.min_height = page.window.height
-    page.vertical_alignment = flet.MainAxisAlignment.START
     page.window.center()
+    time.sleep(0.1) # Loading Time Force : 옵션 적용 전 시작 방지
+    page.update()
     # -- Exit --
     page.window.prevent_close = True # X 이벤트 옵션 추가
     def close_pop_open(e):
@@ -31,6 +33,7 @@ def run_main(page: flet.Page, conn):
     def close_pop(e):
         e.page.close(main_quit)  # 팝업창 종료 명령어
     def close_main(e):
+        page.window.prevent_close = False
         e.page.window.close()
         e.page.window.destroy()
     main_quit = flet.AlertDialog(

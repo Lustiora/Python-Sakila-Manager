@@ -9,8 +9,9 @@ def connect_test(conn, status, page: flet.Page):  # DB 연결 확인
     def close_pop(e):
         page.close(main_quit)  # 팝업창 종료 명령어
     def close_main(e):
+        page.window.prevent_close = False
         page.window.destroy()
-        page.window.close()
+        # page.window.close()
         if getattr(sys, 'frozen', False):  # [Windows EXE]
             current_executable = sys.executable
             current_dir = os.path.dirname(current_executable)
@@ -61,4 +62,3 @@ def connect_test(conn, status, page: flet.Page):  # DB 연결 확인
         status.update()
         print(f"Error: {err}")
         open_pop(page)
-    status.update()

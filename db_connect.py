@@ -2,8 +2,7 @@
 import sys, os, configparser, base64
 import psycopg2
 import flet
-from flet.core.types import MainAxisAlignment, CrossAxisAlignment
-
+import time
 from window import Font
 # -- Variable --
 db = []
@@ -77,24 +76,33 @@ def load_config_to_gui():
             print(f"Error : {e}")
 # -- Auto Login Logic (Launcher) --
 def auto_login_start(page: flet.Page):
+    page.clean()
     page.title = "DB Connect"  # 창 타이틀
+    page.vertical_alignment = flet.MainAxisAlignment.CENTER  # 세로 중앙
+    page.horizontal_alignment = flet.CrossAxisAlignment.CENTER  # 가로 중앙
+    page.window.resizable = False
+    page.window.maximizable = False
     page.window.width = 400  # 창 가로
     page.window.height = 310  # 창 세로
-    # -- Linux Window Force Size --
     page.window.min_width = page.window.width
     page.window.min_height = page.window.height
     page.window.center()
+    time.sleep(0.1)  # Loading Time Force : 옵션 적용 전 시작 방지
     page.update()
-    page.vertical_alignment = flet.MainAxisAlignment.CENTER  # 세로 중앙
-    page.horizontal_alignment = flet.CrossAxisAlignment.CENTER  # 가로 중앙
     connect = flet.Text(value="Connecting to Database", theme_style=flet.TextThemeStyle.TITLE_LARGE)
     page.add(
         flet.Column([
-            flet.Row([connect], alignment=MainAxisAlignment.CENTER),
+            flet.Row([connect], alignment=flet.MainAxisAlignment.CENTER),
             flet.Container(height=0),
-            flet.Row([flet.ProgressRing()], alignment=MainAxisAlignment.CENTER)
-        ], horizontal_alignment=MainAxisAlignment.CENTER)
+            flet.Row([flet.ProgressRing()], alignment=flet.MainAxisAlignment.CENTER)
+        ], horizontal_alignment=flet.MainAxisAlignment.CENTER)
     )
+    # -- Delay min 1.5s --
+    start_time = time.time()
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    if elapsed_time < 1.5:
+        time.sleep(1.5 - elapsed_time)
     if sys.platform == "win32": # windows OS 의 경우
         appdata = os.getenv("APPDATA")
     else: # 그외 OS(Linux)의 경우
@@ -161,6 +169,7 @@ def db_connect_event(e):
         run_staff_login(e.page)
     except Exception as err:
         print(f"Connection Failed:\n{err}")
+        dlg_connect_error.content.value = "Connection Failed"
         e.page.open(dlg_connect_error)
         e.page.update()
 # -- DB Connect GUI (Setup Screen) --
@@ -172,9 +181,13 @@ def run_db_connect(page: flet.Page):
     page.window.width = 400 # 창 가로
     page.window.height = 310 # 창 세로
     page.bgcolor = flet.Colors.BLUE_GREY_50
-    # -- Linux Window Force Size --
+    page.window.resizable = False # 창 크기 변환 금지
+    page.window.maximizable = False # 창 최대화 버튼 금지
     page.window.min_width = page.window.width
     page.window.min_height = page.window.height
+    page.window.center() # 모니터 정중앙 출력
+    time.sleep(0.1)  # Loading Time Force : 옵션 적용 전 시작 방지
+    page.update()
     # -- Exit --
     page.window.prevent_close = True  # X X 이벤트 옵션 추가
     def close_pop(e):
@@ -192,10 +205,6 @@ def run_db_connect(page: flet.Page):
         if e.data == "close":
             e.page.open(main_quit)
     page.window.on_event = window_event
-    # -- -- -- -- -- -- -- -- -- --
-    page.window.resizable = False # 창 크기 변환 금지
-    page.window.maximizable = False # 창 최대화 버튼 금지
-    page.window.center() # 모니터 정중앙 출력
     # -- Label --
     db_name = flet.Text(value="Database")
     db_host = flet.Text(value="Host")

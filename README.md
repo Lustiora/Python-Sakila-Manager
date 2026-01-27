@@ -235,6 +235,9 @@
   5. db_connect, staff_login TextField `autofocus=True` 추가
   6. Status Bar 연동상태 색상 강조
   7. Status Bar 구조 생성 완료
+  8. `time.sleep(0.1)` Loading Time Force : 옵션 적용 전 시작 방지 명령어 추가 (Linux)
+  9. auto_login_start 모듈 실행 시 `Connecting to Database` page 최소 1초 실행 옵션 추가
+  10. 종료 이벤트 `page.window.prevent_close = False` 옵션 추가, Close 무한 루프 방지 (Linux)
 
 <details>
 <summary>Old Workflow</summary>

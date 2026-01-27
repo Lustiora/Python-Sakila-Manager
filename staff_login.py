@@ -1,7 +1,7 @@
 # -- Import --
 import sys, os, configparser, base64, hashlib
 import psycopg2
-import flet
+import flet, time
 from window import Font
 # -- Variable --
 count = 3
@@ -27,14 +27,16 @@ def run_staff_login(page: flet.Page):
     # -- Frame --
     page.clean()
     page.title = "Staff Login"
-    page.window.width = 400
-    page.window.height = 310
     page.bgcolor = flet.Colors.BLUE_GREY_50
-    # -- Linux Window Force Size --
-    page.window.min_width = page.window.width
-    page.window.min_height = page.window.height
     page.window.resizable = False
     page.window.maximizable = False
+    page.window.width = 400
+    page.window.height = 310
+    page.window.min_width = page.window.width
+    page.window.min_height = page.window.height
+    page.window.center()
+    time.sleep(0.1)  # Loading Time Force : 옵션 적용 전 시작 방지
+    page.update()
     # -- Exit --
     page.window.prevent_close = True  # X 이벤트 옵션 추가
     def close_pop(e):

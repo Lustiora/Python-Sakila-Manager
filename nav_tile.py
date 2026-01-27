@@ -12,6 +12,7 @@ def nav(page: flet.Page):
     def close_pop(e):
         page.close(main_quit)  # 팝업창 종료 명령어
     def close_main(e):
+        page.window.prevent_close = False
         page.window.close()
         page.window.destroy()
     main_quit = flet.AlertDialog(
