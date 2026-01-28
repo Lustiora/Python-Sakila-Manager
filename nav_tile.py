@@ -1,11 +1,17 @@
 import flet
+from menu.menu import *
+from menu.menu_search import *
+from menu.menu_edit import *
+from menu.menu_delete import *
+from menu.menu_add import *
 
 def nav(page: flet.Page):
     basic_content = flet.Container(
-        content=flet.Text("Welcome Sakila"),
+        content=c_home(),
         alignment=flet.alignment.center,
         expand=True,
-        border_radius=5
+        border_radius=5,
+        padding=20
     )
     def close_pop_open(e):
         page.open(main_quit)
@@ -22,105 +28,61 @@ def nav(page: flet.Page):
                  flet.TextButton("Cancel", on_click=close_pop)
                  ], actions_alignment=flet.MainAxisAlignment.END)
     def on_nav_change(index):
-        if index == 0:
-            basic_content.content.value = "상태"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.PURPLE
-        elif index == 1.1:
-            basic_content.content.value = "1.1 고객"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BLUE
-        elif index == 1.2:
-            basic_content.content.value = "1.2 재고"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BROWN_500
-        elif index == 1.3:
-            basic_content.content.value = "1.3 영화"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.YELLOW_200
-        elif index == 1.4:
-            basic_content.content.value = "1.4 대여"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.LIGHT_BLUE_100
-        elif index == 1.5:
-            basic_content.content.value = "1.5 결제"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.DEEP_ORANGE_200
-        elif index == 2.1:
-            basic_content.content.value = "2.1 고객"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BLUE
-        elif index == 2.2:
-            basic_content.content.value = "2.2 재고"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BROWN_500
-        elif index == 2.3:
-            basic_content.content.value = "2.3 영화"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.YELLOW_200
-        elif index == 2.4:
-            basic_content.content.value = "2.4 대여"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.LIGHT_BLUE_100
-        elif index == 2.5:
-            basic_content.content.value = "2.5 결제"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.DEEP_ORANGE_200
-        elif index == 3.1:
-            basic_content.content.value = "3.1 고객"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BLUE
-        elif index == 3.2:
-            basic_content.content.value = "3.2 재고"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BROWN_500
-        elif index == 3.3:
-            basic_content.content.value = "3.3 영화"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.YELLOW_200
-        elif index == 3.4:
-            basic_content.content.value = "3.4 대여"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.LIGHT_BLUE_100
-        elif index == 3.5:
-            basic_content.content.value = "3.5 결제"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.DEEP_ORANGE_200
-        elif index == 4.1:
-            basic_content.content.value = "4.1 고객"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BLUE
-        elif index == 4.2:
-            basic_content.content.value = "4.2 재고"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BROWN_500
-        elif index == 4.3:
-            basic_content.content.value = "4.3 영화"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.YELLOW_200
-        elif index == 4.4:
-            basic_content.content.value = "4.4 배우"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.LIGHT_BLUE_100
-        elif index == 4.5:
-            basic_content.content.value = "4.5 장르"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.DEEP_ORANGE_200
-        elif index == 5:
-            basic_content.content.value = "통계"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BLUE
-        elif index == 6:
-            basic_content.content.value = "관리"
-            basic_content.content.color = flet.Colors.ON_SURFACE
-            basic_content.bgcolor = flet.Colors.BROWN_500
+        if index == 0: # 메인화면
+            basic_content.content = c_home()
+        elif index == 1.1: # 고객 조회
+            basic_content.content = search_customer()
+        elif index == 1.2: # 재고 조회
+            basic_content.content = search_inventory()
+        elif index == 1.3: # 영화 조회
+            basic_content.content = search_film()
+        elif index == 1.4: # 대여상태 조회
+            basic_content.content = search_rental()
+        elif index == 1.5: # 결제이력 조회
+            basic_content.content = search_payment()
+        elif index == 2.1: # 고객정보 변경
+            basic_content.content = edit_customer()
+        elif index == 2.2: # 재고정보 변경
+            basic_content.content = edit_inventory()
+        elif index == 2.3: # 영화정보 변경
+            basic_content.content = edit_film()
+        elif index == 2.4: # 대여상태 변경
+            basic_content.content = edit_rental()
+        elif index == 2.5: # 결제상태 변경
+            basic_content.content = edit_payment()
+        elif index == 3.1: # 고객 삭제
+            basic_content.content = delete_customer()
+        elif index == 3.2: # 재고 삭제
+            basic_content.content = delete_inventory()
+        elif index == 3.3: # 영화 삭제
+            basic_content.content = delete_film()
+        elif index == 3.4: # 대여이력 삭제
+            basic_content.content = delete_rental()
+        elif index == 3.5: # 결제이력 삭제
+            basic_content.content = delete_payment()
+        elif index == 4.1: # 고객 추가
+            basic_content.content = add_customer()
+        elif index == 4.2: # 재고 추가
+            basic_content.content = add_inventory()
+        elif index == 4.3: # 영화 추가
+            basic_content.content = add_film()
+        elif index == 4.4: # 배우 추가
+            basic_content.content = add_actor()
+        elif index == 4.5: # 장르 추가
+            basic_content.content = add_category()
+        elif index == 5: # 통계
+            basic_content.content = c_statistic()
+        elif index == 6: # 관리
+            basic_content.content = c_manager()
+        elif index == 7: # 접속 상태
+            basic_content.content = c_status()
 
         basic_content.update()
     tile_column = flet.Column(
         controls=[
             flet.ListTile(
-                leading=flet.Icon(flet.Icons.MENU_ROUNDED),
-                title=flet.Text("Status"),
+                leading=flet.Icon(flet.Icons.HOME),
+                title=flet.Text("Home"),
                 on_click=lambda e: on_nav_change(0)
             ),flet.Divider(
             ),flet.ExpansionTile(
@@ -151,8 +113,35 @@ def nav(page: flet.Page):
                     ),
                 ]
             ),flet.ExpansionTile(
+                leading=flet.Icon(flet.Icons.ADD_BOX),
+                title=flet.Text("Add"),
+                bgcolor=flet.Colors.BLUE_GREY_200,
+                controls=[
+                    flet.ListTile(
+                        title=flet.Text("Customer"),
+                        content_padding=flet.padding.only(left=40),
+                        on_click=lambda e: on_nav_change(4.1)
+                    ),flet.ListTile(
+                        title=flet.Text("Inventory"),
+                        content_padding=flet.padding.only(left=40),
+                        on_click=lambda e: on_nav_change(4.2)
+                    ),flet.ListTile(
+                        title=flet.Text("Film"),
+                        content_padding=flet.padding.only(left=40),
+                        on_click=lambda e: on_nav_change(4.3)
+                    ),flet.ListTile(
+                        title=flet.Text("Actor"),
+                        content_padding=flet.padding.only(left=40),
+                        on_click=lambda e: on_nav_change(4.4)
+                    ),flet.ListTile(
+                        title=flet.Text("Category"),
+                        content_padding=flet.padding.only(left=40),
+                        on_click=lambda e: on_nav_change(4.5)
+                    ),
+                ]
+            ),flet.ExpansionTile(
                 leading=flet.Icon(flet.Icons.CHANGE_CIRCLE),
-                title=flet.Text("Change"),
+                title=flet.Text("Edit"),
                 bgcolor=flet.Colors.BLUE_GREY_200,
                 controls=[
                     flet.ListTile(
@@ -204,33 +193,6 @@ def nav(page: flet.Page):
                         on_click=lambda e: on_nav_change(3.5)
                     ),
                 ]
-            ),flet.ExpansionTile(
-                leading=flet.Icon(flet.Icons.ADD_BOX),
-                title=flet.Text("Add"),
-                bgcolor=flet.Colors.BLUE_GREY_200,
-                controls=[
-                    flet.ListTile(
-                        title=flet.Text("Customer"),
-                        content_padding=flet.padding.only(left=40),
-                        on_click=lambda e: on_nav_change(4.1)
-                    ),flet.ListTile(
-                        title=flet.Text("Inventory"),
-                        content_padding=flet.padding.only(left=40),
-                        on_click=lambda e: on_nav_change(4.2)
-                    ),flet.ListTile(
-                        title=flet.Text("Film"),
-                        content_padding=flet.padding.only(left=40),
-                        on_click=lambda e: on_nav_change(4.3)
-                    ),flet.ListTile(
-                        title=flet.Text("Actor"),
-                        content_padding=flet.padding.only(left=40),
-                        on_click=lambda e: on_nav_change(4.4)
-                    ),flet.ListTile(
-                        title=flet.Text("Category"),
-                        content_padding=flet.padding.only(left=40),
-                        on_click=lambda e: on_nav_change(4.5)
-                    ),
-                ]
             ),flet.Divider(
             ),flet.ListTile(
                 leading=flet.Icon(flet.Icons.QUERY_STATS),
@@ -240,12 +202,17 @@ def nav(page: flet.Page):
                 leading=flet.Icon(flet.Icons.MANAGE_ACCOUNTS),
                 title=flet.Text("Manager"),
                 on_click=lambda e: on_nav_change(6)
+            ),flet.Divider(
+            ),flet.ListTile(
+                leading=flet.Icon(flet.Icons.SIGNAL_CELLULAR_ALT),
+                title=flet.Text("Dashboard"),
+                on_click=lambda e: on_nav_change(7)
             ),flet.ListTile(
                 leading=flet.Icon(flet.Icons.EXIT_TO_APP),
                 title=flet.Text("Exit"),
                 on_click=close_pop_open
             )
-        ], scroll=flet.ScrollMode.AUTO
+        ]
     )
     ex_tile = flet.Container(
         width=180,

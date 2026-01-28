@@ -78,6 +78,7 @@ def load_config_to_gui():
 def auto_login_start(page: flet.Page):
     page.clean()
     page.title = "DB Connect"  # 창 타이틀
+    page.bgcolor = flet.Colors.BLUE_GREY_50
     page.vertical_alignment = flet.MainAxisAlignment.CENTER  # 세로 중앙
     page.horizontal_alignment = flet.CrossAxisAlignment.CENTER  # 가로 중앙
     page.window.resizable = False

@@ -227,6 +227,12 @@
 
 ## Workflow
 
+* **2026-01-28**
+  1. 
+
+<details>
+<summary>Old Workflow</summary>
+
 * **2026-01-27**
   1. DB Connect ~ Main 까지 이어지는 과정 최적화
   2. DB Monitor > Main Window 연결
@@ -238,9 +244,6 @@
   8. `time.sleep(0.1)` Loading Time Force : 옵션 적용 전 시작 방지 명령어 추가 (Linux)
   9. auto_login_start 모듈 실행 시 `Connecting to Database` page 최소 1초 실행 옵션 추가
   10. 종료 이벤트 `page.window.prevent_close = False` 옵션 추가, Close 무한 루프 방지 (Linux)
-
-<details>
-<summary>Old Workflow</summary>
 
 * **2026-01-26**
   1. 기존 tkinter 구조에서 customtkinter로 변환하였으나 GUI 부분에서 아쉬운점이 많아 파기

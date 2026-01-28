@@ -1,5 +1,7 @@
 # -- Import --
 import flet, time
+from flet.core.types import CrossAxisAlignment, MainAxisAlignment
+
 from db_monitor import connect_test
 from nav_tile import nav
 # -- Variable --
@@ -12,7 +14,7 @@ def staff_user_id(user_id, store):
     staff_store = store
     staff_user = user_id
     return staff_user, staff_store
-def run_main(page: flet.Page, conn):
+def run_main(page: flet.Page): # conn
     # -- Frame --
     page.clean()
     page.title = "Sakila"
@@ -48,7 +50,7 @@ def run_main(page: flet.Page, conn):
     page.window.on_event = window_event
     # -- Statusbar --
     con_status = flet.Container(
-        content=flet.Text(value="status"),
+        content=flet.Text(value="status "),
         alignment=flet.Alignment(1, 1),
         height=24,
         padding=2,
@@ -59,12 +61,16 @@ def run_main(page: flet.Page, conn):
     ex_tile, basic_content = nav(page) # Return 값 변수 수거
     # -- Page --
     page.add(
-        flet.Row([ex_tile, flet.VerticalDivider(width=1),
-                  flet.Column([basic_content, con_status],expand=True)]
-        , expand=True)
+        flet.Row([
+            flet.Column([ex_tile
+                ],scroll=flet.ScrollMode.AUTO, alignment=MainAxisAlignment.START),
+            flet.VerticalDivider(width=1),
+            flet.Column([basic_content, con_status],expand=True)
+                ], expand=True, vertical_alignment=flet.CrossAxisAlignment.START
+        )
     )
-    connect_test(conn, con_status, page)
+    # connect_test(conn, con_status, page)
     # -- Update --
     page.update()
 # -- Run Test --
-# flet.app(target=main_window)
+flet.app(target=run_main)
