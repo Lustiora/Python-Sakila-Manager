@@ -1,4 +1,4 @@
-# Sakila Shop Management Tools
+# Sakila Store Management System
 
 ## Assets
 
