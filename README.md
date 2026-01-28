@@ -228,7 +228,9 @@
 ## Workflow
 
 * **2026-01-28**
-  1. 
+  1. Tile Menu 생성 (홈, 조회, ~, 접속상태)
+  2. Main Home 작성
+  3. System Dashboard (접속 정보) 작성
 
 <details>
 <summary>Old Workflow</summary>

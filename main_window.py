@@ -1,20 +1,10 @@
 # -- Import --
 import flet, time
-from flet.core.types import CrossAxisAlignment, MainAxisAlignment
-
 from db_monitor import connect_test
 from nav_tile import nav
 # -- Variable --
-staff_user = None
-staff_store = None
 # -- Module --
-def staff_user_id(user_id, store):
-    global staff_user
-    global staff_store
-    staff_store = store
-    staff_user = user_id
-    return staff_user, staff_store
-def run_main(page: flet.Page): # conn
+def run_main(page: flet.Page, conn, login_db, login_host, login_port, staff_store, staff_user): # conn
     # -- Frame --
     page.clean()
     page.title = "Sakila"
@@ -58,19 +48,19 @@ def run_main(page: flet.Page): # conn
         bgcolor=flet.Colors.OUTLINE
     )
     # -- Main Area --
-    ex_tile, basic_content = nav(page) # Return 값 변수 수거
+    ex_tile, basic_content = nav(page, login_db, login_host, login_port, staff_store, staff_user) # Return 값 변수 수거
     # -- Page --
     page.add(
         flet.Row([
             flet.Column([ex_tile
-                ],scroll=flet.ScrollMode.AUTO, alignment=MainAxisAlignment.START),
+                ],scroll=flet.ScrollMode.AUTO, alignment=flet.MainAxisAlignment.START),
             flet.VerticalDivider(width=1),
-            flet.Column([basic_content, con_status],expand=True)
+            flet.Column([basic_content, con_status],expand=True),
                 ], expand=True, vertical_alignment=flet.CrossAxisAlignment.START
         )
     )
-    # connect_test(conn, con_status, page)
+    connect_test(conn, con_status, page)
     # -- Update --
     page.update()
 # -- Run Test --
-flet.app(target=run_main)
+# flet.app(target=run_main, assets_dir="assets")

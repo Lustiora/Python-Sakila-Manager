@@ -5,7 +5,7 @@ from menu.menu_edit import *
 from menu.menu_delete import *
 from menu.menu_add import *
 
-def nav(page: flet.Page):
+def nav(page: flet.Page, login_db, login_host, login_port, staff_store, staff_user):
     basic_content = flet.Container(
         content=c_home(),
         alignment=flet.alignment.center,
@@ -75,7 +75,7 @@ def nav(page: flet.Page):
         elif index == 6: # 관리
             basic_content.content = c_manager()
         elif index == 7: # 접속 상태
-            basic_content.content = c_status()
+            basic_content.content = c_status(login_db, login_host, login_port, staff_store, staff_user)
 
         basic_content.update()
     tile_column = flet.Column(

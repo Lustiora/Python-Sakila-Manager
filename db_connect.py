@@ -248,4 +248,4 @@ def run_db_connect(page: flet.Page):
     # -- Update --
     page.update() # 모듈의 작성된 코드를 적용
 # -- Run --
-flet.app(target=auto_login_start) # 모듈 실행을 정의
+flet.app(target=auto_login_start, assets_dir="assets") # 모듈 실행을 정의

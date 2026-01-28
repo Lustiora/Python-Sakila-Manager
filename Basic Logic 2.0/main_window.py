@@ -55,7 +55,6 @@ def run_main(conn, login_db, login_host, login_port):
     global current_login_data
     global current_status
     global check_status
-    global staff_user
     current_login_data = None
     current_status = None
 
