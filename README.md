@@ -1,5 +1,152 @@
-# Python-Sakila
-> Sakila DB > Read POS (Point of Sales) Simulator
+# Sakila Store Management System
+
+## Assets
+
+* PostgreSQL
+* Python
+* Sakila Sample Database (MySQL)
+* Flet Library (Python)
+* Windows 11
+* Arch Linux 
+
+## Workflow
+
+* 예정 : 
+  * 조회된 목록을 export 하는 기능 
+  * 조회된 목록에서 선택을 하여 수정, 삭제 기능으로 연결
+
+* **2026-01-29**
+  1. Search Customer 검색 모듈 분할
+  2. try, except > Error 구분 문구 추가
+
+<details>
+<summary>Old Workflow</summary>
+
+* **2026-01-28**
+  1. Tile Menu 생성 (홈, 조회, ~, 접속상태)
+  2. Main Home 작성
+  3. System Dashboard (접속 정보) 작성
+  4. Search Customer 작성
+
+* **2026-01-27**
+  1. DB Connect ~ Main 까지 이어지는 과정 최적화
+  2. DB Monitor > Main Window 연결
+  3. page.window.max_ 제거 (Windows OS Window Resize Error)
+  4. Auto Login 시작 시 `Connecting to Database` Text 추가
+  5. db_connect, staff_login TextField `autofocus=True` 추가
+  6. Status Bar 연동상태 색상 강조
+  7. Status Bar 구조 생성 완료
+  8. `time.sleep(0.1)` Loading Time Force : 옵션 적용 전 시작 방지 명령어 추가 (Linux)
+  9. auto_login_start 모듈 실행 시 `Connecting to Database` page 최소 1초 실행 옵션 추가
+  10. 종료 이벤트 `page.window.prevent_close = False` 옵션 추가, Close 무한 루프 방지 (Linux)
+
+* **2026-01-26**
+  1. 기존 tkinter 구조에서 customtkinter로 변환하였으나 GUI 부분에서 아쉬운점이 많아 파기
+  2. flet(0.28.3)을 사용하여 웹, 앱 호환성 해결을 위한 변환작업 진행중 (DB Connect > Main Window 연결 완료)
+  <br>(0.80.3 >> Script End Monitor Brightness "0" Issue)
+  <br>https://flet-controls-gallery.fly.dev/
+  3. Linux Flet 호환성 옵션 추가 (최소 최대값을 지정하여 Window Size 강제)
+    ```bash
+    page.window.min_width = page.window.width
+    page.window.min_height = page.window.height
+    page.window.max_width = page.window.min_width
+    page.window.max_height = page.window.min_height
+    ```
+  4. Exit Popup 추가 `page.window.prevent_close = True ~ event`
+  <br>Linux > `e.page.window.destroy()`
+
+* **2026-01-23**
+  1. Menubar Module 별도 py 분리 (Sub Frame search, change, delete, add)
+  2. Window Module start_move, on_drag 이전
+  3. Menubar Status_Frame Login Staff 표시 staff_login > main_window
+  4. 차후 테마 적용을 위한 Theme 생성
+  5. tkinter > customtkinter 변환
+
+* **2026-01-22**
+  1. Status Bar 구현 (DB 접속상태 5s 체크)
+  2. Linux 호환 설정 DB Disconnect Restart Debug
+  3. pyinstaller > Package Compile 
+  ```bash
+  pyinstaller -F -w -n Sakila_Basic_Logic_2_3 db_connect.py
+  
+  Linux 실행 성공
+  Window 별도 Package Compile 필요 (pyinstaller Cross-Compile 지원하지 않음)
+  ````
+  4. Linux에서 재시작에 성공하고 Windows에서 실패하는 현상 debug (분기 추가)
+  5. db_connect.py > config.ini 파일 유무에 따른 동작 로직 변경 (파일 존재시 바로 접속 시도)
+  6. Windows EXE Compile Restart Error Debug > 파일 자체를 재실행 하는 방식으로 전환<br>
+  ```bash
+  # 원인
+  Windows EXE 실행 시 임시폴더를 생성 후 해당 위치에 Compile된 EXE를 실행하는 방식이었으나
+  Restart Logic 실행 시
+  Windows는 프로그램이 종료되었다고 생각하여 임시폴더를 삭제하고 환경변수, 임시폴더위치는 상속되어
+  실행되지 않고 에러 발생
+  
+  Linux Compile Test >> Clear
+  ```
+  7. Windows Sandbox Test >> **Clear** 
+
+* **2026-01-21**
+  1. Main Window Menubar Create
+  2. Sub Window Frame 구현중
+  3. Status Bar 구현중 (DB 접속상태 체크)
+  4. DB Connect 5s Test, Disconnect > db_connect.py link Logic 추가
+  5. Linux 호환 설정 추가 <br>
+      ```bash
+      import sys <br>
+      if sys.platform == "win32": appdata = os.getenv("APPDATA") # Window의 경우<br>
+      else: appdata = os.path.expanduser("~/.config") # Linux의 경우
+      ```
+  6. Window Array Middle Debug
+
+* **2026-01-20**
+  1. DB Connect Debug
+  2. DB Connect GUI > Staff Login GUI Connect
+  3. Main Window Create
+
+* **2026-01-19**
+  1. Basic Logic 2.0 설계
+  2. DB Connect GUI, INI File Create
+
+* **2026-01-16 (GUI)**
+  1. DVD 목록 검색기능 + 결제 버튼 추가 / `GUI_test1.py`
+  2. 키보드 입력 최적화 / `GUI_test1.py`
+  3. 결제기능 구현 + 연체료와 대여료를 합산하여 결제도 가능 / `GUI_test1.py`
+  4. 전역변수로 필요 데이터 수거 기능 추가 / `GUI_test1.py`
+  5. exe file 생성 `pyinstaller` 및 테스트 / `GUI_test1 - 1.exe`
+  6. **성공**
+  7. 구조 변경을 통한 동작 흐름 최적화 / `GUI_test2.py`
+    <img width="707" height="437" alt="스크린샷 2026-01-20 170017" src="https://github.com/user-attachments/assets/c2ea61f9-b06a-44d9-9592-cf3a0bfa5a8e" />
+
+* **2026-01-15 (GUI)**
+  1. 로그인 화면 구현 및 DB 연결 / `GUI_test1.py`
+  2. 고객검색 화면 구현 및 미반납 로그 출력 / `GUI_test1.py`
+  3. exe file 생성 `pyinstaller` 및 테스트 / `GUI_test1.exe`
+  4. `방화벽 포트 개방 5432` 
+  5. `QUERY Tool` > `SHOW hba_file;` > `IPv4 local connections 모든 IP 접속 허용`
+  6. **성공**
+    <img width="271" height="141" alt="스크린샷 2026-01-20 165959" src="https://github.com/user-attachments/assets/2b732a9f-7eb9-4e53-b514-540f517ac469" />
+
+* **2026-01-14 (CLI)**
+  1. 미반납 이력이 존재하는 경우 미반납 이력과 연체 목록, 전체 연체료 출력 , 계산 > rental , film / `CLI_test1.py`
+  2. 스파게티 코드의 모듈화 / `CLI_test2.py`
+  3. 사용자 확인 구간에서 종료 커맨드 추가 / `CLI_test2.py`
+  4. 장바구니 기능 추가 및 종료 시 장바구니 목록, 전체 대여료 출력 , 계산 / `CLI_test2.py`
+  5. 데이터 오염 방지를 위해 DB 직접 저장 **Cancel**
+
+* **2026-01-13 (CLI)**
+  1. Basic Logic 1.0 설계
+  2. 존재하는 사용자인지 아닌지를 확인하며 미반납 이력을 확인 > customer / `CLI_test1.py`
+  3. 존재하는 영화 여부 확인 및 대여기간을 지정하여 대여기간에 따른 대여료 출력 > inventory , film / `CLI_test1.py`
+
+</details>
+
+## Hot Reload 실행 구성
+* `flet run -r ./main_window.py` 해당 명령어로 실행은 flet가 정지되는 경우가 잦음
+* script : ~/Python-Sakila/.venv/Scripts/flet.exe
+* 변수 : run -r ./main_window.py
+* 작업 디렉터리 : ~/Python-Sakila
+* db_connect 는 Hot Reload 불가
 
 ## Basic Logic 2.0
 
@@ -225,137 +372,3 @@
       * [Flet](https://github.com/flet-dev/flet)
     * Rank Window > (현재 시간 기준 Week Rank, Month Rank, Year Rank) 추가
       * Columns (Rank , Title , Description (설명), Rating (관람등급), category(장르)(film > film_category > category Table)
-
-## Hot Reload 실행 구성
-* `flet run -r ./main_window.py` 해당 명령어로 실행은 flet가 정지되는 경우가 잦음
-* script : ~/Python-Sakila/.venv/Scripts/flet.exe
-* 변수 : run -r ./main_window.py
-* 작업 디렉터리 : ~/Python-Sakila
-
-## Workflow
-
-Hot Reload Check
-
-* **2026-01-28**
-  1. Tile Menu 생성 (홈, 조회, ~, 접속상태)
-  2. Main Home 작성
-  3. System Dashboard (접속 정보) 작성
-  4. Search Customer 작성 및 분할
-  5. try, except Error 구분 문구 추가
-
-<details>
-<summary>Old Workflow</summary>
-
-* **2026-01-27**
-  1. DB Connect ~ Main 까지 이어지는 과정 최적화
-  2. DB Monitor > Main Window 연결
-  3. page.window.max_ 제거 (Windows OS Window Resize Error)
-  4. Auto Login 시작 시 `Connecting to Database` Text 추가
-  5. db_connect, staff_login TextField `autofocus=True` 추가
-  6. Status Bar 연동상태 색상 강조
-  7. Status Bar 구조 생성 완료
-  8. `time.sleep(0.1)` Loading Time Force : 옵션 적용 전 시작 방지 명령어 추가 (Linux)
-  9. auto_login_start 모듈 실행 시 `Connecting to Database` page 최소 1초 실행 옵션 추가
-  10. 종료 이벤트 `page.window.prevent_close = False` 옵션 추가, Close 무한 루프 방지 (Linux)
-
-* **2026-01-26**
-  1. 기존 tkinter 구조에서 customtkinter로 변환하였으나 GUI 부분에서 아쉬운점이 많아 파기
-  2. flet(0.28.3)을 사용하여 웹, 앱 호환성 해결을 위한 변환작업 진행중 (DB Connect > Main Window 연결 완료)
-  <br>(0.80.3 >> Script End Monitor Brightness "0" Issue)
-  <br>https://flet-controls-gallery.fly.dev/
-  3. Linux Flet 호환성 옵션 추가 (최소 최대값을 지정하여 Window Size 강제)
-    ```bash
-    page.window.min_width = page.window.width
-    page.window.min_height = page.window.height
-    page.window.max_width = page.window.min_width
-    page.window.max_height = page.window.min_height
-    ```
-  4. Exit Popup 추가 `page.window.prevent_close = True ~ event`
-  <br>Linux > `e.page.window.destroy()`
-
-
-* **2026-01-23**
-  1. Menubar Module 별도 py 분리 (Sub Frame search, change, delete, add)
-  2. Window Module start_move, on_drag 이전
-  3. Menubar Status_Frame Login Staff 표시 staff_login > main_window
-  4. 차후 테마 적용을 위한 Theme 생성
-  5. tkinter > customtkinter 변환
-
-* **2026-01-22**
-  1. Status Bar 구현 (DB 접속상태 5s 체크)
-  2. Linux 호환 설정 DB Disconnect Restart Debug
-  3. pyinstaller > Package Compile 
-  ```bash
-  pyinstaller -F -w -n Sakila_Basic_Logic_2_3 db_connect.py
-  
-  Linux 실행 성공
-  Window 별도 Package Compile 필요 (pyinstaller Cross-Compile 지원하지 않음)
-  ````
-  4. Linux에서 재시작에 성공하고 Windows에서 실패하는 현상 debug (분기 추가)
-  5. db_connect.py > config.ini 파일 유무에 따른 동작 로직 변경 (파일 존재시 바로 접속 시도)
-  6. Windows EXE Compile Restart Error Debug > 파일 자체를 재실행 하는 방식으로 전환<br>
-  ```bash
-  # 원인
-  Windows EXE 실행 시 임시폴더를 생성 후 해당 위치에 Compile된 EXE를 실행하는 방식이었으나
-  Restart Logic 실행 시
-  Windows는 프로그램이 종료되었다고 생각하여 임시폴더를 삭제하고 환경변수, 임시폴더위치는 상속되어
-  실행되지 않고 에러 발생
-  
-  Linux Compile Test >> Clear
-  ```
-  7. Windows Sandbox Test >> **Clear** 
-
-* **2026-01-21**
-  1. Main Window Menubar Create
-  2. Sub Window Frame 구현중
-  3. Status Bar 구현중 (DB 접속상태 체크)
-  4. DB Connect 5s Test, Disconnect > db_connect.py link Logic 추가
-  5. Linux 호환 설정 추가 <br>
-      ```bash
-      import sys <br>
-      if sys.platform == "win32": appdata = os.getenv("APPDATA") # Window의 경우<br>
-      else: appdata = os.path.expanduser("~/.config") # Linux의 경우
-      ```
-  6. Window Array Middle Debug
-
-* **2026-01-20**
-  1. DB Connect Debug
-  2. DB Connect GUI > Staff Login GUI Connect
-  3. Main Window Create
-
-* **2026-01-19**
-  1. Basic Logic 2.0 설계
-  2. DB Connect GUI, INI File Create
-
-* **2026-01-16 (GUI)**
-  1. DVD 목록 검색기능 + 결제 버튼 추가 / `GUI_test1.py`
-  2. 키보드 입력 최적화 / `GUI_test1.py`
-  3. 결제기능 구현 + 연체료와 대여료를 합산하여 결제도 가능 / `GUI_test1.py`
-  4. 전역변수로 필요 데이터 수거 기능 추가 / `GUI_test1.py`
-  5. exe file 생성 `pyinstaller` 및 테스트 / `GUI_test1 - 1.exe`
-  6. **성공**
-  7. 구조 변경을 통한 동작 흐름 최적화 / `GUI_test2.py`
-    <img width="707" height="437" alt="스크린샷 2026-01-20 170017" src="https://github.com/user-attachments/assets/c2ea61f9-b06a-44d9-9592-cf3a0bfa5a8e" />
-
-* **2026-01-15 (GUI)**
-  1. 로그인 화면 구현 및 DB 연결 / `GUI_test1.py`
-  2. 고객검색 화면 구현 및 미반납 로그 출력 / `GUI_test1.py`
-  3. exe file 생성 `pyinstaller` 및 테스트 / `GUI_test1.exe`
-  4. `방화벽 포트 개방 5432` 
-  5. `QUERY Tool` > `SHOW hba_file;` > `IPv4 local connections 모든 IP 접속 허용`
-  6. **성공**
-    <img width="271" height="141" alt="스크린샷 2026-01-20 165959" src="https://github.com/user-attachments/assets/2b732a9f-7eb9-4e53-b514-540f517ac469" />
-
-* **2026-01-14 (CLI)**
-  1. 미반납 이력이 존재하는 경우 미반납 이력과 연체 목록, 전체 연체료 출력 , 계산 > rental , film / `CLI_test1.py`
-  2. 스파게티 코드의 모듈화 / `CLI_test2.py`
-  3. 사용자 확인 구간에서 종료 커맨드 추가 / `CLI_test2.py`
-  4. 장바구니 기능 추가 및 종료 시 장바구니 목록, 전체 대여료 출력 , 계산 / `CLI_test2.py`
-  5. 데이터 오염 방지를 위해 DB 직접 저장 **Cancel**
-
-* **2026-01-13 (CLI)**
-  1. Basic Logic 1.0 설계
-  2. 존재하는 사용자인지 아닌지를 확인하며 미반납 이력을 확인 > customer / `CLI_test1.py`
-  3. 존재하는 영화 여부 확인 및 대여기간을 지정하여 대여기간에 따른 대여료 출력 > inventory , film / `CLI_test1.py`
-
-</details>
