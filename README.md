@@ -231,20 +231,22 @@
 * script : ~/Python-Sakila/.venv/Scripts/flet.exe
 * 변수 : run -r ./main_window.py
 * 작업 디렉터리 : ~/Python-Sakila
+* db_connect 는 Hot Reload 불가
 
 ## Workflow
 
-Hot Reload Check
+* **2026-01-29**
+  1. Search Customer 검색 모듈 분할
+  2. try, except > Error 구분 문구 추가
+
+<details>
+<summary>Old Workflow</summary>
 
 * **2026-01-28**
   1. Tile Menu 생성 (홈, 조회, ~, 접속상태)
   2. Main Home 작성
   3. System Dashboard (접속 정보) 작성
-  4. Search Customer 작성 및 분할
-  5. try, except Error 구분 문구 추가
-
-<details>
-<summary>Old Workflow</summary>
+  4. Search Customer 작성
 
 * **2026-01-27**
   1. DB Connect ~ Main 까지 이어지는 과정 최적화
