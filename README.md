@@ -29,6 +29,7 @@
   2. try, except > Error 구분 문구 추가
   3. Search Inventory 모듈 (ID (Film Title 등), 동일한 Film Title의 inventory ID 및 정보, 대여상태) 작성
   4. Search Film 모듈 작성
+  5. 변수명 수정
 
 <details>
 <summary>Old Workflow</summary>
