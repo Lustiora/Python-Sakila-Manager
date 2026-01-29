@@ -5,7 +5,6 @@ from nav_tile import nav
 # -- Variable --
 # -- Module --
 def run_main(page: flet.Page, conn, login_db, login_host, login_port, staff_store, staff_user):
-# def run_main(page: flet.Page): # test
     # -- Frame --
     page.clean()
     page.title = "Sakila"
@@ -48,7 +47,6 @@ def run_main(page: flet.Page, conn, login_db, login_host, login_port, staff_stor
     )
     # -- Main Area --
     ex_tile, basic_content = nav(page, login_db, login_host, login_port, staff_store, staff_user, conn) # Return 값 변수 수거
-    # ex_tile, basic_content = nav(page)  # test
     # -- Page --
     page.add(
         flet.Row([
@@ -62,5 +60,3 @@ def run_main(page: flet.Page, conn, login_db, login_host, login_port, staff_stor
     connect_test(conn, con_status, page)
     # -- Update --
     page.update()
-# -- Run Test --
-# flet.app(target=run_main, assets_dir="assets") # test

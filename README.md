@@ -11,18 +11,22 @@
 
 ## Workflow
 
-* 예정 : 
-  * Search Inventory 모듈 (ID (Film Title 등), 동일한 Film Title의 inventory ID 및 정보, 대여상태)
+* View 최소 3 Row : 818px
+* View 최소 6 Row : 650px
+
+* 예정 :
   * 조회된 목록을 export 하는 기능 
   * 조회된 목록에서 선택을 하여 수정, 삭제 기능으로 연결
   * c_status에 터미널 로그창을 추가하여 동작 상태를 출력하고 export하는 기능
   * 쿼리문을 config에서 불러오는 방식으로 수정하여 쿼리문 수정이 가능하게 구성
-  * 돋보기 기능을 추가 window > Font <Class 방식으로 전환>
-  * 테마 기능 추가
+  * 돋보기 기능 window > Font <Class 방식으로 전환>
+  * 테마 기능
+  * System 동작 중 서버 연결이 끊어지는 경우 재연결을 시도하는 기능
 
 * **2026-01-29**
   1. Search Customer 모듈 (ID, Name) 분할
   2. try, except > Error 구분 문구 추가
+  3. Search Inventory 모듈 (ID (Film Title 등), 동일한 Film Title의 inventory ID 및 정보, 대여상태) 작성
 
 <details>
 <summary>Old Workflow</summary>

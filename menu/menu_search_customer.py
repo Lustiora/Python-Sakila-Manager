@@ -50,12 +50,12 @@ def search_customer_id(page, conn):
         "Search", on_click=scq_id, width=80, style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
     sc_id = flet.DataTable(
         columns=[
-            flet.DataColumn(flet.Text("ID")),
-            flet.DataColumn(flet.Text("Create Date")),
-            flet.DataColumn(flet.Text("First Name")),
-            flet.DataColumn(flet.Text("Last Name")),
-            flet.DataColumn(flet.Text("Email",width=240)),
-            flet.DataColumn(flet.Text("Address",width=160)),
+            flet.DataColumn(flet.Text("ID", width=25)),
+            flet.DataColumn(flet.Text("Create Date", width=74)),
+            flet.DataColumn(flet.Text("First Name", width=80)),
+            flet.DataColumn(flet.Text("Last Name", width=80)),
+            flet.DataColumn(flet.Text("Email",width=235)),
+            flet.DataColumn(flet.Text("Address",width=156)),
         ],
         rows=[],
         border=flet.border.all(1, "flet.Colors.BLUE_GREY_100"), # DataTable Titlebar
@@ -104,7 +104,6 @@ def search_customer_name(page, conn):
             customer_data = cursor.fetchall()
             if customer_data:
                 sc_name.rows.clear()
-                print(customer_data)
                 for sc_row in customer_data:
                     sc_name.rows.append(
                         flet.DataRow(cells=[
@@ -125,12 +124,12 @@ def search_customer_name(page, conn):
     search_name = flet.Button("Search", on_click=scq_firstname, width=80, style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
     sc_name = flet.DataTable(
         columns=[
-            flet.DataColumn(flet.Text("ID")),
-            flet.DataColumn(flet.Text("Create Date")),
-            flet.DataColumn(flet.Text("First Name")),
-            flet.DataColumn(flet.Text("Last Name")),
-            flet.DataColumn(flet.Text("Email",width=240)),
-            flet.DataColumn(flet.Text("Address",width=160)),
+            flet.DataColumn(flet.Text("ID", width=25)),
+            flet.DataColumn(flet.Text("Create Date", width=74)),
+            flet.DataColumn(flet.Text("First Name", width=80)),
+            flet.DataColumn(flet.Text("Last Name", width=80)),
+            flet.DataColumn(flet.Text("Email",width=235)),
+            flet.DataColumn(flet.Text("Address",width=156)),
         ],
         rows=[],
         border=flet.border.all(1, "flet.Colors.BLUE_GREY_100"), # DataTable Titlebar
