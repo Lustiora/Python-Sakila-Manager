@@ -107,7 +107,7 @@ def search_inventory(page, conn):
     )
 
 def search_film(page, conn):
-    film_title, search_title, s_f_title = search_film_title(page, conn)
+    film_title_text, search_title, film_title = search_film_title(page, conn)
     return flet.Column(
         controls=[
             flet.Row([
@@ -116,7 +116,7 @@ def search_film(page, conn):
             flet.Divider(),
             flet.Row([
                 flet.Text("Title & Description :", style=flet.TextThemeStyle.BODY_LARGE, width=200, text_align="right"),
-                film_title,
+                film_title_text,
                 search_title
             ], height=30),
             flet.Divider(),
@@ -124,7 +124,7 @@ def search_film(page, conn):
                 flet.Container(
                     bgcolor=flet.Colors.GREY_200,
                     alignment=flet.alignment.top_left,
-                    content=s_f_title,
+                    content=film_title,
                     expand=True,
                     padding=10,
                     border_radius=5,
