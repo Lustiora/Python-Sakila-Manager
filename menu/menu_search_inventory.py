@@ -70,36 +70,6 @@ def build_inventory_ui(page, store_id, conn):
         cursor = conn.cursor()
         try:
             cursor.execute(
-                # """ with search_int_inventory_idtle_1 as (
-                #         select f.film_id
-                #         from inventory i
-                #         inner join film f
-                #             on i.film_id = f.film_id
-                #         where i.inventory_id = %s
-                #     ), search_int_inventory_idtle_2 as (
-                #         select
-                #             row_number() over (partition by i.inventory_id order by r.rental_date desc) as row ,
-                #             i.inventory_id ,
-                #             f.title ,
-                #             r.rental_date ,
-                #             r.return_date
-                #         from inventory i
-                #         inner join search_int_inventory_idtle_1 s
-                #             on i.film_id = s.film_id
-                #         inner join film f
-                #             on i.film_id = f.film_id
-                #         left join rental r
-                #             on i.inventory_id = r.inventory_id
-                #     )
-                #     select
-                #         inventory_id ,
-                #         title,
-                #         case
-                #             when rental_date is not null and return_date is null then 'Checked out'
-                #             else 'In stock'
-                #         end as status
-                #     from search_int_inventory_idtle_2
-                #     where row = 1 """,(int_inventory_id,)
                 """ select f.film_id
                     from inventory i 
                     inner join film f 

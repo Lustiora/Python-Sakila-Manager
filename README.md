@@ -100,50 +100,125 @@ flet run -r ./main_window.py
 ## 📜 Development Log (Workflow)
 
 * **Latest Update: 2026-01-31**
-  1. query_current_status module query 단축 및 스토어 정보를 연결하여 해당 점포에만 존재하는 재고를 출력
-  2. Improved variable and function names
-        <details><summary>Improvement History</summary>
+   1. query_current_status module query 단축 및 스토어 정보를 연결하여 해당 점포에만 존재하는 재고를 출력
+         <details><summary>Query</summary>
+
+         수정 전
+        ```sql
+        cursor.execute("""
+        with search_int_inventory_idtle_1 as (
+        select f.film_id
+        from inventory i
+        inner join film f
+            on i.film_id = f.film_id
+        where i.inventory_id = %s
+        ), search_int_inventory_idtle_2 as (
+        select
+            row_number() over (partition by i.inventory_id order by r.rental_date desc) as row ,
+            i.inventory_id ,
+            f.title ,
+            r.rental_date ,
+            r.return_date
+        from inventory i
+        inner join search_int_inventory_idtle_1 s
+            on i.film_id = s.film_id
+        inner join film f
+            on i.film_id = f.film_id
+        left join rental r
+            on i.inventory_id = r.inventory_id
+        )
+        select
+            inventory_id ,
+            title,
+            case
+            when rental_date is not null and return_date is null then 'Checked out'
+            else 'In stock'
+            end as status
+        from search_int_inventory_idtle_2
+        where row = 1 """,(int_inventory_id,)
+        ```
         
-        | 파일명 | Old | New | 비고 (역할) |
-        | --- | --- | --- | --- |
-        | **`menu.py`** | `c_home` | **`view_home`** | 메인 홈 화면 반환 |
-        |  | `c_status` | **`view_system_dashboard`** | 시스템 상태 대시보드 반환 |
-        |  | `c_statistic` | **`view_analytics`** | 통계/분석 화면 반환 |
-        |  | `c_manager` | **`view_admin_manager`** | 관리자 설정 화면 반환 |
-        | **`menu_search.py`** | `search_customer` | **`view_search_customer`** | 고객 조회 전체 화면 구성 |
-        |  | `search_inventory` | **`view_search_inventory`** | 재고 조회 전체 화면 구성 |
-        |  | `search_film` | **`view_search_film`** | 영화 조회 전체 화면 구성 |
-        | **`menu_search_inventory.py`** | `search_inventory_data` | **`build_inventory_ui`** | UI 컴포넌트 생성 및 반환 |
-        |  | `stock_id_module` | **`query_basic_info`** | DB: 기본 정보 조회 로직 |
-        |  | `stock_rental_module` | **`query_rental_history`** | DB: 대여 이력 조회 로직 |
-        |  | `stock_title_module` | **`query_current_status`** | DB: 현재 상태(대여중/반납) 조회 |
-        |  | `iv_bu` | **`on_click_search`** | 이벤트: 검색 버튼 클릭 핸들러 |
-        |  | `inventory_id` | **`input_inventory_id`** | UI: 재고 ID 입력창 (TextField) |
-        |  | `search` | **`btn_search`** | UI: 검색 버튼 (Button) |
-        |  | `stock_id_data` | **`table_basic_info`** | UI: 기본 정보 표 (DataTable) |
-        |  | `stock_id` | **`ui_basic_info`** | UI: 기본 정보 컨테이너 (Container/Row) |
-        |  | `stock_rental_data` | **`table_rental_history`** | UI: 대여 이력 표 (DataTable) |
-        |  | `stock_rental` | **`ui_rental_history`** | UI: 대여 이력 컨테이너 |
-        |  | `stock_title_data` | **`table_current_status`** | UI: 현재 상태 표 (DataTable) |
-        |  | `stock_title` | **`ui_current_status`** | UI: 현재 상태 컨테이너 |
-        | **`menu_search_film.py`** | `search_film_title` | **`build_film_ui`** | UI 컴포넌트 생성 및 반환 |
-        |  | `sfq_title` | **`handle_search`** | 이벤트: 검색 로직 핸들러 |
-        |  | `film_title_text` | **`input_film_title`** | UI: 영화 제목 입력창 |
-        |  | `film_title_data` | **`table_film_list`** | UI: 영화 목록 표 |
-        |  | `film_title` | **`ui_film_list`** | UI: 영화 목록 컨테이너 |
-        | **`menu_search_customer.py`** | `search_customer_id` | **`build_customer_id_ui`** | ID 검색 UI 생성 |
-        |  | `customer_id_module` | **`query_customer_by_id`** | DB: ID로 고객 조회 |
-        |  | `search_customer_name` | **`build_customer_name_ui`** | 이름 검색 UI 생성 |
-        |  | `customer_name_module` | **`query_customer_by_name`** | DB: 이름으로 고객 조회 |
-        | **`menu_add.py`** | `add_customer` | **`view_add_customer`** | 신규 등록 화면 반환 |
-        |  | `add_inventory` | **`view_add_inventory`** | (이하 동일 규칙 적용) |
-        |  | `add_film` | **`view_add_film`** |  |
-        | **`menu_edit.py`** | `edit_customer` | **`view_edit_customer`** | 정보 수정 화면 반환 |
-        |  | `edit_inventory` | **`view_edit_inventory`** |  |
-        | **`menu_delete.py`** | `delete_customer` | **`view_delete_customer`** | 정보 삭제 화면 반환 |
-        |  | `delete_inventory` | **`view_delete_inventory`** |  |
+        수정 후
+        ```sql
+        CREATE OR REPLACE VIEW public.inventory_data as
+        select 
+            row_number() over (partition by i.inventory_id order by r.rental_date desc) as row ,
+            f.film_id ,
+            i.store_id ,
+            i.inventory_id , 
+            r.return_date ,
+            case when r.rental_date is not null and r.return_date is null then 'Checked out'
+            else 'In stock' end as status 
+        from inventory i 
+        inner join film f 
+            on i.film_id = f.film_id 
+        left join rental r 
+            on i.inventory_id = r.inventory_id;
+        --
+        cursor.execute("""
+        select f.film_id
+        from inventory i 
+        inner join film f 
+            on i.film_id = f.film_id
+        where i.inventory_id = %s """,(int_inventory_id,)
+        )
+        film_store_inventory_id = cursor.fetchone()
+        result = film_store_inventory_id[0]
+        cursor.execute(""" 
+        select 
+            inventory_id, 
+            status
+        from inventory_data 
+        where row = 1
+            and film_id = %s
+            and store_id = %s """,(result, store_id,)
+        ```
+
+         </details>
+   
+   2. Improved variable and function names
+         <details><summary>Improvement History</summary>
         
-        </details>
+         | 파일명 | Old | New | 비고 (역할) |
+         | --- | --- | --- | --- |
+         | **`menu.py`** | `c_home` | **`view_home`** | 메인 홈 화면 반환 |
+         |  | `c_status` | **`view_system_dashboard`** | 시스템 상태 대시보드 반환 |
+         |  | `c_statistic` | **`view_analytics`** | 통계/분석 화면 반환 |
+         |  | `c_manager` | **`view_admin_manager`** | 관리자 설정 화면 반환 |
+         | **`menu_search.py`** | `search_customer` | **`view_search_customer`** | 고객 조회 전체 화면 구성 |
+         |  | `search_inventory` | **`view_search_inventory`** | 재고 조회 전체 화면 구성 |
+         |  | `search_film` | **`view_search_film`** | 영화 조회 전체 화면 구성 |
+         | **`menu_search_inventory.py`** | `search_inventory_data` | **`build_inventory_ui`** | UI 컴포넌트 생성 및 반환 |
+         |  | `stock_id_module` | **`query_basic_info`** | DB: 기본 정보 조회 로직 |
+         |  | `stock_rental_module` | **`query_rental_history`** | DB: 대여 이력 조회 로직 |
+         |  | `stock_title_module` | **`query_current_status`** | DB: 현재 상태(대여중/반납) 조회 |
+         |  | `iv_bu` | **`on_click_search`** | 이벤트: 검색 버튼 클릭 핸들러 |
+         |  | `inventory_id` | **`input_inventory_id`** | UI: 재고 ID 입력창 (TextField) |
+         |  | `search` | **`btn_search`** | UI: 검색 버튼 (Button) |
+         |  | `stock_id_data` | **`table_basic_info`** | UI: 기본 정보 표 (DataTable) |
+         |  | `stock_id` | **`ui_basic_info`** | UI: 기본 정보 컨테이너 (Container/Row) |
+         |  | `stock_rental_data` | **`table_rental_history`** | UI: 대여 이력 표 (DataTable) |
+         |  | `stock_rental` | **`ui_rental_history`** | UI: 대여 이력 컨테이너 |
+         |  | `stock_title_data` | **`table_current_status`** | UI: 현재 상태 표 (DataTable) |
+         |  | `stock_title` | **`ui_current_status`** | UI: 현재 상태 컨테이너 |
+         | **`menu_search_film.py`** | `search_film_title` | **`build_film_ui`** | UI 컴포넌트 생성 및 반환 |
+         |  | `sfq_title` | **`handle_search`** | 이벤트: 검색 로직 핸들러 |
+         |  | `film_title_text` | **`input_film_title`** | UI: 영화 제목 입력창 |
+         |  | `film_title_data` | **`table_film_list`** | UI: 영화 목록 표 |
+         |  | `film_title` | **`ui_film_list`** | UI: 영화 목록 컨테이너 |
+         | **`menu_search_customer.py`** | `search_customer_id` | **`build_customer_id_ui`** | ID 검색 UI 생성 |
+         |  | `customer_id_module` | **`query_customer_by_id`** | DB: ID로 고객 조회 |
+         |  | `search_customer_name` | **`build_customer_name_ui`** | 이름 검색 UI 생성 |
+         |  | `customer_name_module` | **`query_customer_by_name`** | DB: 이름으로 고객 조회 |
+         | **`menu_add.py`** | `add_customer` | **`view_add_customer`** | 신규 등록 화면 반환 |
+         |  | `add_inventory` | **`view_add_inventory`** | (이하 동일 규칙 적용) |
+         |  | `add_film` | **`view_add_film`** |  |
+         | **`menu_edit.py`** | `edit_customer` | **`view_edit_customer`** | 정보 수정 화면 반환 |
+         |  | `edit_inventory` | **`view_edit_inventory`** |  |
+         | **`menu_delete.py`** | `delete_customer` | **`view_delete_customer`** | 정보 삭제 화면 반환 |
+         |  | `delete_inventory` | **`view_delete_inventory`** |  |
+        
+         </details>
 
 <details><summary>📂 Past Development Log (Click to Expand)</summary>
 
