@@ -50,8 +50,10 @@ def build_film_ui(page, conn):
                 page.open(error_quit)
         except Exception as err:
             print(f"Search Film error : {err}")
-    input_film_title = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10, autofocus=True)
-    search_title = flet.Button("Search", on_click=handle_search, width=80, style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
+    input_film_title = flet.TextField(
+        text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10, autofocus=True)
+    search_title = flet.Button("Search", on_click=handle_search, width=80,
+                               style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
     table_film_list = flet.DataTable(
         columns=[
             flet.DataColumn(flet.Text("ID")),

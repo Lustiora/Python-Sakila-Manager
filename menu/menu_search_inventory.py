@@ -103,9 +103,11 @@ def build_inventory_ui(page, store_id, conn):
         query_basic_info(e)
         query_rental_history(e)
         query_current_status(e)
-    input_inventory_id = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10, autofocus=True)
+    input_inventory_id = flet.TextField(
+        text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10, autofocus=True)
     btn_search = flet.Button(
-        "Search", on_click=on_click_search, width=80, style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
+        "Search", on_click=on_click_search, width=80,
+        style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
     table_basic_info = flet.DataTable(
         columns=[
             flet.DataColumn(flet.Text("ID", width=60)),

@@ -63,10 +63,12 @@ def run_staff_login(page: flet.Page):
     staff_user = flet.Text(value="Staff ID")
     staff_password = flet.Text(value="Password")
     # -- Entry --
-    user = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=10, max_length=10, autofocus=True)
+    user = flet.TextField(
+        text_size=Font.fontsize, width=150, height=30, content_padding=10, max_length=10, autofocus=True)
     password = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=10, max_length=20)
     # -- Button --
-    login = flet.Button("Login", on_click=check_login_process, width=230, style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
+    login = flet.Button("Login", on_click=check_login_process, width=230,
+                        style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
     # -- Layout --
     page.add(
         flet.Row([

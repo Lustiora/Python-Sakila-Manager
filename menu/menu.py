@@ -68,11 +68,16 @@ def view_status(login_db, login_host, login_port, staff_store, staff_user):
                                 flet.Text("Staff :", style=flet.TextThemeStyle.BODY_MEDIUM)
                             ], horizontal_alignment=flet.CrossAxisAlignment.END
                             ),flet.Column([
-                                flet.Text(value=login_db, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
-                                flet.Text(value=login_host, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
-                                flet.Text(value=login_port, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
-                                flet.Text(value=staff_store, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
-                                flet.Text(value=staff_user, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD)
+                                flet.Text(
+                                    value=login_db, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
+                                flet.Text(
+                                    value=login_host, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
+                                flet.Text(
+                                    value=login_port, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
+                                flet.Text(
+                                    value=staff_store, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
+                                flet.Text(
+                                    value=staff_user, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD)
                             ])
                         ], alignment=flet.MainAxisAlignment.CENTER)
                     ], horizontal_alignment=flet.CrossAxisAlignment.CENTER, alignment=flet.MainAxisAlignment.CENTER)
@@ -99,11 +104,16 @@ def view_status(login_db, login_host, login_port, staff_store, staff_user):
                                 flet.Text("Staff :", style=flet.TextThemeStyle.BODY_MEDIUM)
                             ], horizontal_alignment=flet.CrossAxisAlignment.END
                             ),flet.Column([
-                                flet.Text(value=login_db, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
-                                flet.Text(value=login_host, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
-                                flet.Text(value=login_port, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
-                                flet.Text(value=staff_store, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
-                                flet.Text(value=staff_user, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD)
+                                flet.Text(
+                                    value=login_db, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
+                                flet.Text(
+                                    value=login_host, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
+                                flet.Text(
+                                    value=login_port, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
+                                flet.Text(
+                                    value=staff_store, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD),
+                                flet.Text(
+                                    value=staff_user, style=flet.TextThemeStyle.BODY_MEDIUM, weight=flet.FontWeight.BOLD)
                             ])
                         ], alignment=flet.MainAxisAlignment.CENTER)
                     ], horizontal_alignment=flet.CrossAxisAlignment.CENTER, alignment=flet.MainAxisAlignment.CENTER)

@@ -45,9 +45,11 @@ def build_customer_id_ui(page, conn):
                 page.open(error_quit)
         except Exception as err:
             print(f"Search Customer error : {err}")
-    customer_id_text = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10, autofocus=True)
+    customer_id_text = flet.TextField(
+        text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10, autofocus=True)
     search_id = flet.Button(
-        "Search", on_click=query_customer_by_id, width=80, style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
+        "Search", on_click=query_customer_by_id, width=80,
+        style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
     customer_id_data = flet.DataTable(
         columns=[
             flet.DataColumn(flet.Text("ID", width=25)),
@@ -122,8 +124,10 @@ def build_customer_name_ui(page, store_id, conn):
                 page.open(error_quit)
         except Exception as err:
             print(f"Search Customer error : {err}")
-    customer_name_text = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10, autofocus=True)
-    search_name = flet.Button("Search", on_click=query_customer_by_name, width=80, style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
+    customer_name_text = flet.TextField(
+        text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10, autofocus=True)
+    search_name = flet.Button("Search", on_click=query_customer_by_name, width=80,
+                              style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
     customer_name_data = flet.DataTable(
         columns=[
             flet.DataColumn(flet.Text("ID")),

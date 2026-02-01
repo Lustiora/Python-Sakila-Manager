@@ -50,7 +50,8 @@ def view_search_customer(page, store_id, conn):
     )
 
 def view_search_inventory(page, store_id, conn):
-    input_inventory_id, btn_search, ui_basic_info, ui_rental_history, ui_current_status = build_inventory_ui(page, store_id, conn)  # Module Return Value get
+    input_inventory_id, btn_search, ui_basic_info, ui_rental_history, ui_current_status = (
+        build_inventory_ui(page, store_id, conn))  # Module Return Value get
     return flet.Column(
         controls=[
             flet.Row([
@@ -77,7 +78,8 @@ def view_search_inventory(page, store_id, conn):
             flet.Divider(),
             flet.Row([
                 flet.Column([
-                    flet.Row([flet.Text("Rental Data", width=200, text_align="center", theme_style=flet.TextThemeStyle.TITLE_LARGE, italic=True)],height=40),
+                    flet.Row([flet.Text("Rental Data", width=200, text_align="center",
+                                        theme_style=flet.TextThemeStyle.TITLE_LARGE, italic=True)],height=40),
                     flet.Divider(),
                     flet.Container(
                         bgcolor=flet.Colors.GREY_200,
@@ -90,7 +92,8 @@ def view_search_inventory(page, store_id, conn):
                     )
                 ], expand=True),
                 flet.Column([
-                    flet.Row([flet.Text("Inventory Status", width=200, text_align="center", theme_style=flet.TextThemeStyle.TITLE_LARGE, italic=True)],height=40),
+                    flet.Row([flet.Text("Inventory Status", width=200, text_align="center",
+                                        theme_style=flet.TextThemeStyle.TITLE_LARGE, italic=True)],height=40),
                     flet.Divider(),
                     flet.Container(
                         bgcolor=flet.Colors.GREY_200,
@@ -115,7 +118,8 @@ def view_search_film(page, conn):
             ], height=80),
             flet.Divider(),
             flet.Row([
-                flet.Text("Title & Description & Actor :", style=flet.TextThemeStyle.BODY_LARGE, width=200, text_align="right"),
+                flet.Text("Title & Description & Actor :",
+                          style=flet.TextThemeStyle.BODY_LARGE, width=200, text_align="right"),
                 input_film_title,
                 search_title
             ], height=30),
