@@ -1,5 +1,6 @@
 import flet
 from window import Font, Ratios
+from query import Search
 
 def build_inventory_ui(page, store_id, conn):
     inventory_id_data = flet.ListView(expand=True, spacing=0)
@@ -14,16 +15,13 @@ def build_inventory_ui(page, store_id, conn):
                      ], actions_alignment=flet.MainAxisAlignment.END)
         try:
             cart_inventory_id.append(int(input_inventory.value)) # ANY(%s) 조회를 위해 상자 보관
-            # cart_inventory_id = int(input_inventory.value) -> ID 상자를 만들지 않는 경우 사용가능 | ANY(%s) -> ERROR
             print(f"Search Inventory ID : {int(input_inventory.value)}")
         except:
             str_film_title = f"%{input_inventory.value}%"
             print("Not ID -> Title Search")
             cursor = conn.cursor()
             try:
-                cursor.execute( """ select distinct inventory_id
-                                    from inventory_data
-                                    where title ilike %s """,(str_film_title,))
+                cursor.execute(Search.film_title_query,(str_film_title,))
                 film_title = cursor.fetchall()
                 if film_title:
                     print(f"Title Check : {input_inventory.value}")
@@ -40,17 +38,7 @@ def build_inventory_ui(page, store_id, conn):
                 return # 조회 실패시 쿼리 실행 방지
         cursor = conn.cursor()
         try:
-            cursor.execute(
-                """ select
-                        inventory_id ,
-                        title ,
-                        case when store_id = 1 then '🇨🇦 Lethbridge' else '🇦🇺 Woodridge' end as store ,
-                        case when return_date is not null then 'In stock' else 'Checked out' end as status ,
-                        rental_date ,
-                        rental_rate
-                    from inventory_data
-                    where status is not null
-                    and inventory_id = ANY(%s) """,(cart_inventory_id,)) # ANY(%s) : 상자에 담겨있는 ID들을 전부 비교
+            cursor.execute(Search.inventory_id_query,(cart_inventory_id,))
             inventory_data = cursor.fetchall()
             print(inventory_data)
             if inventory_data:
@@ -58,16 +46,15 @@ def build_inventory_ui(page, store_id, conn):
                 for row in inventory_data:
                     status_color = flet.Colors.BLACK
                     store_color = flet.Colors.BLACK
-                    if row[4] == 'Checked out':
+                    if row[3] == 'Checked out':
                         status_color = flet.Colors.RED_ACCENT
-                    if row[7] == store_id:
-                        if row[3] == '🇦🇺 Woodridge':
+                    if row[6] == store_id:
+                        if row[2] == '🇦🇺 Woodridge':
                             store_color = flet.Colors.ORANGE
-                        if row[3] == '🇨🇦 Lethbridge':
+                        if row[2] == '🇨🇦 Lethbridge':
                             store_color = flet.Colors.BLUE
                     else:
                         store_color = flet.Colors.RED_ACCENT
-                    print("cut1")
                     inventory_id_data.controls.append(
                         flet.Container(
                             content=flet.Row(
@@ -105,11 +92,8 @@ def build_inventory_ui(page, store_id, conn):
                 page.open(error_quit)
         except Exception as err:
             print(f"Search Inventory error : {err}")
-    input_inventory = flet.TextField(hint_text=" ID or Title",
-        text_size=Font.big_fontsize, expand=Ratios.id, content_padding=10, max_length=20, autofocus=True)
-    search_inventory = flet.Button(
-        "Search", on_click=query_inventory, width=120, height=40,
-        style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
+    input_inventory = flet.TextField(hint_text=" ID or Title ↵", on_submit=query_inventory, helper_text="Press Enter to Search",
+        text_size=Font.big_fontsize, expand=Ratios.id, content_padding=10, max_length=30, autofocus=True)
     header = flet.Container(
         content = flet.Row(
             controls=[
@@ -133,4 +117,4 @@ def build_inventory_ui(page, store_id, conn):
         ],
         expand=True, spacing=5
     )
-    return input_inventory, search_inventory, view_inventory
+    return input_inventory, view_inventory

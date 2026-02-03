@@ -3,17 +3,14 @@ from menu.menu_search_inventory import *
 from menu.menu_search_film import *
 
 def view_search_customer(page, store_id, conn):
-    input_customer, search_customer, view_customer = build_customer_ui(page, store_id, conn) # Module Return Value get
+    input_customer, view_customer = build_customer_ui(page, store_id, conn) # Module Return Value get
     return flet.Column(
         controls=[
             flet.Row([
                 flet.Text("Customer Lookup", style=flet.TextThemeStyle.DISPLAY_MEDIUM, italic=True)
             ], height=80),
             flet.Divider(),
-            flet.Row([
-                input_customer,
-                search_customer
-            ], height=60),
+            flet.Row([input_customer], height=60),
             flet.Divider(),
             flet.Column([
                 flet.Container(
@@ -30,17 +27,14 @@ def view_search_customer(page, store_id, conn):
     )
 
 def view_search_inventory(page, store_id, conn):
-    input_inventory, search_inventory, view_inventory = build_inventory_ui(page, store_id, conn)  # Module Return Value get
+    input_inventory, view_inventory = build_inventory_ui(page, store_id, conn)  # Module Return Value get
     return flet.Column(
         controls=[
             flet.Row([
                 flet.Text("Inventory Search", style=flet.TextThemeStyle.DISPLAY_MEDIUM, italic=True)
             ], height=80),
             flet.Divider(),
-            flet.Row([
-                input_inventory,
-                search_inventory,
-            ], height=60),
+            flet.Row([input_inventory,], height=60),
             flet.Divider(),
             flet.Column([
                 flet.Container(

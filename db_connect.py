@@ -217,7 +217,7 @@ def run_db_connect(page: flet.Page):
     host = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=40)
     port = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=6)
     username = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=10)
-    password = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=20)
+    password = flet.TextField(text_size=Font.fontsize, width=150, height=30, content_padding=5, max_length=20, on_submit=db_connect_event)
     # text_align=flet.TextAlign.RIGHT : 입력문자 우측에서 좌측 출력 (기본 좌측에서 우측 출력)
     # content_padding : 입력칸 테두리와 글자 사이의 간격 (들여쓰기, 위아래)
     # max_length : 최대 문자값

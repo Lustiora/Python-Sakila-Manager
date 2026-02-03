@@ -1,5 +1,6 @@
 import flet
 from window import Font, Ratios
+from query import Search
 
 def build_customer_ui(page, store_id, conn):
     customer_id_data = flet.ListView(expand=True, spacing=0)
@@ -21,10 +22,7 @@ def build_customer_ui(page, store_id, conn):
             print("Not ID -> Name Search")
             cursor = conn.cursor()
             try:
-                cursor.execute( """ select customer_id
-                                    from customer
-                                    where first_name ilike %s 
-                                        or last_name ilike %s """,(str_customer_name,str_customer_name,))
+                cursor.execute(Search.customer_name_query,(str_customer_name,str_customer_name,))
                 customer_name_id = cursor.fetchall()
                 if customer_name_id:
                     print(f"Name Check : {input_customer.value}")
@@ -41,32 +39,16 @@ def build_customer_ui(page, store_id, conn):
                 return # 조회 실패시 쿼리 실행 방지
         cursor = conn.cursor()
         try:
-            cursor.execute(
-                """ select
-                        case when c.store_id = 1 then '🇨🇦 Lethbridge' else '🇦🇺 Woodridge' end as store ,
-                        c.customer_id ,
-                        c.first_name || ' ' || c.last_name as name,
-                        c.email,
-                        a.address,
-                        c.create_date ,
-                        case when n.customer_id is not null then 'Overdue' else 'Normal' end as status ,
-                        c.store_id
-                    from customer c
-                    inner join address a
-                        on c.address_id = a.address_id
-                    left join not_return_customer n
-                        on n.customer_id = c.customer_id
-                    where c.activebool is true
-                        and c.customer_id = ANY(%s) """,(cart_customer_id,)) # ANY(%s) : 상자에 담겨있는 ID들을 전부 비교
+            cursor.execute(Search.customer_id_query,(cart_customer_id,))
             customer_data = cursor.fetchall()
             if customer_data:
                 customer_id_data.controls.clear()
                 for row in customer_data:
                     status_color = flet.Colors.BLACK
                     store_color = flet.Colors.BLACK
-                    if row[6] == 'Overdue':
+                    if row[7] == 'Overdue':
                         status_color = flet.Colors.RED_ACCENT
-                    if row[7] == store_id:
+                    if row[8] == store_id:
                         if row[0] == '🇦🇺 Woodridge':
                             store_color = flet.Colors.ORANGE
                         if row[0] == '🇨🇦 Lethbridge':
@@ -82,28 +64,32 @@ def build_customer_ui(page, store_id, conn):
                                         no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=row[0], color=store_color),
                                     flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
                                     flet.Text(
-                                        str(row[1]), expand=Ratios.id, text_align="center",
-                                        no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=str(row[1])),
+                                        row[1], expand=Ratios.name, text_align="center",
+                                        no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=row[1]),
                                     flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
                                     flet.Text(
-                                        row[2], expand=Ratios.name, text_align="center",
-                                        no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=row[2]),
+                                        str(row[2]), expand=Ratios.id, text_align="center",
+                                        no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=str(row[2])),
                                     flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
                                     flet.Text(
                                         row[3], expand=Ratios.email, text_align="center",
                                         no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=row[3]),
                                     flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
                                     flet.Text(
-                                        row[4], expand=Ratios.address, text_align="center",
+                                        row[4], expand=Ratios.phone, text_align="center",
                                         no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=row[4]),
                                     flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
                                     flet.Text(
-                                        str(row[5])[:10], expand=Ratios.date, text_align="center",
-                                        no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=str(row[5])[:10]),
+                                        row[5], expand=Ratios.address, text_align="center",
+                                        no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=row[5]),
                                     flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
                                     flet.Text(
-                                        row[6], expand=Ratios.status, text_align="center",
-                                        no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=row[6], color=status_color),
+                                        str(row[6])[:10], expand=Ratios.date, text_align="center",
+                                        no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=str(row[6])[:10]),
+                                    flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
+                                    flet.Text(
+                                        row[7], expand=Ratios.status, text_align="center",
+                                        no_wrap=True, overflow=flet.TextOverflow.ELLIPSIS, tooltip=row[7], color=status_color),
                                 ], alignment=flet.MainAxisAlignment.START, spacing=5
                             ), padding=10, border_radius=5, height=40, expand=True # height=40 -> VerticalDivider 사용을 위해 필요
                         )
@@ -114,21 +100,20 @@ def build_customer_ui(page, store_id, conn):
                 page.open(error_quit)
         except Exception as err:
             print(f"Search Customer error : {err}")
-    input_customer = flet.TextField(hint_text=" ID or Name",
-        text_size=Font.big_fontsize, expand=Ratios.id, content_padding=10, max_length=20, autofocus=True)
-    search_customer = flet.Button(
-        "Search", on_click=query_customer, width=120, height=40,
-        style=flet.ButtonStyle(shape=(flet.RoundedRectangleBorder(radius=5))))
+    input_customer = flet.TextField(hint_text=" ID or Name ↵", on_submit=query_customer, helper_text="Press Enter to Search",
+        text_size=Font.big_fontsize, expand=Ratios.id, content_padding=10, max_length=30, autofocus=True)
     header = flet.Container(
         content = flet.Row(
             controls=[
                 flet.Text("Store", expand=Ratios.store, text_align="center"),
                 flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
-                flet.Text("ID", expand=Ratios.id, text_align="center"),
-                flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
                 flet.Text("Name", expand=Ratios.name, text_align="center"),
                 flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
+                flet.Text("ID", expand=Ratios.id, text_align="center"),
+                flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
                 flet.Text("Email", expand=Ratios.email, text_align="center"),
+                flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
+                flet.Text("Phone", expand=Ratios.phone, text_align="center"),
                 flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
                 flet.Text("Address", expand=Ratios.address, text_align="center"),
                 flet.VerticalDivider(width=1, color=flet.Colors.PRIMARY),
@@ -144,4 +129,4 @@ def build_customer_ui(page, store_id, conn):
         ],
         expand=True, spacing=5
     )
-    return input_customer, search_customer, view_customer
+    return input_customer, view_customer

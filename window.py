@@ -9,7 +9,8 @@ class Ratios:
     id = 1
     name = 2
     email = 3
-    address = 3
+    phone = 2
+    address = 2
     date = 2
     status = 2
     rate = 2

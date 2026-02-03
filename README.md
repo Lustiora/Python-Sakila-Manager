@@ -117,7 +117,8 @@ flet run -r ./main_window.py
 1. Datatable → Row,Column,Expand 방식으로 전환 (flet 0.28.3 : page.on_resize 명령어 부재)
 2. Popup Autofocus 추가
 3. **Search Customer:** 검색 화면 재설계 (ID or Name (First or Last Name))
-4. **Search Inventory:** View Table 재생성 및 쿼리 재설정 / 재설계중
+4. **Search Inventory:** View Table 재생성 및 쿼리 재설정 / 재설계 (ID or Film Title)
+5. search query 분리
     
     <details><summary>Query</summary>
     
