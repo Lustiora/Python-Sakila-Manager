@@ -50,35 +50,6 @@ def view_search_inventory(page, store_id, conn):
         ]
     )
 
-def view_search_film(page, conn):
-    input_film_title, search_title, ui_film_list = build_film_ui(page, conn)
-    return flet.Column(
-        controls=[
-            flet.Row([
-                flet.Text("Film Catalog Search", style=flet.TextThemeStyle.DISPLAY_MEDIUM, italic=True)
-            ], height=80),
-            flet.Divider(),
-            flet.Row([
-                flet.Text("Keyword :",
-                          style=flet.TextThemeStyle.BODY_LARGE, width=100, text_align="right"),
-                input_film_title,
-                search_title
-            ], height=30),
-            flet.Divider(),
-            flet.Column([
-                flet.Container(
-                    bgcolor=flet.Colors.GREY_200,
-                    alignment=flet.alignment.top_left,
-                    content=ui_film_list,
-                    expand=True,
-                    padding=10,
-                    border_radius=5,
-                    border=flet.border.all(1, "flet.Colors.BLUE_GREY_50"),
-                )
-            ], expand=True, alignment=flet.alignment.center),
-        ]
-    )
-
 def view_search_rental():
     rental = flet.TextField(width=150, height=30, content_padding=10, max_length=10, autofocus=True)
     search = flet.Button("Search", on_click="", width=80,
