@@ -13,7 +13,7 @@ echo "[Web Mode] http://localhost:34636"
 echo "[Exit] Ctrl + C"
 echo "---------------------------------------------------"
 
-flet run -r -w -p 34636 test_main_window.py
+flet run -r -w -v -p 34636 test_main_window.py
 
 echo ""
 read -p "Press Enter to exit..."

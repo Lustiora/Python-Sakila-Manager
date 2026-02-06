@@ -1,5 +1,8 @@
+import warnings
+warnings.filterwarnings("ignore") # 경고 메시지 출력으로 인한 딜레이 방지
+
 # -- Import --
-import flet, time, os, sys, configparser, base64, psycopg2
+import flet, os, sys, configparser, base64, psycopg2
 from db_monitor import connect_test
 from test_nav_tile import nav
 # -- Variable --
@@ -38,28 +41,6 @@ def check_login_process(page: flet.Page):
         page.bgcolor = flet.Colors.BLUE_GREY_50
         page.vertical_alignment = flet.MainAxisAlignment.START
         page.update()
-        # -- Exit --
-        page.window.prevent_close = True  # X 이벤트 옵션 추가
-
-        def close_pop(e):
-            page.close(main_quit)  # 팝업창 종료 명령어
-
-        def close_main(e):
-            page.window.prevent_close = False
-            e.page.window.close()
-
-        main_quit = flet.AlertDialog(
-            title=flet.Text("Quit"),
-            content=flet.Text("Exit?"),
-            actions=[flet.TextButton("OK", on_click=close_main, autofocus=True),
-                     flet.TextButton("Cancel", on_click=close_pop)
-                     ], actions_alignment=flet.MainAxisAlignment.END)
-
-        def window_event(e):
-            if e.data == "close":
-                e.page.open(main_quit)
-
-        page.window.on_event = window_event
         # -- Statusbar --
         con_status = flet.Container(
             content=flet.Text(value="status "),
@@ -82,7 +63,7 @@ def check_login_process(page: flet.Page):
             ], expand=True, vertical_alignment=flet.CrossAxisAlignment.START
             )
         )
-        connect_test(conn, con_status, page)
+        # connect_test(conn, con_status, page)
         # -- Update --
         page.update()
     else:
