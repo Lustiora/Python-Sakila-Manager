@@ -2,12 +2,7 @@
 chcp 65001 >nul
 cd /d "%~dp0"
 
-if not exist ".gitignore" (
-    echo .venv>> .gitignore
-    echo __pycache__>> .gitignore
-) else (
-    findstr ".venv" ".gitignore" >nul || echo .venv>> .gitignore
-)
+set PYTHONPATH=%~dp0
 
 taskkill /F /IM python.exe /T >nul 2>&1
 
@@ -20,12 +15,13 @@ if exist ".venv\Scripts\activate.bat" (
 )
 
 echo ---------------------------------------------------
-echo 🚀 Flet Hot Reload 🚀
+echo 🚀 Flet Hot Reload (Source Isolated & PYTHONPATH Fixed)
 echo [Web Mode] http://localhost:34636
 echo ---------------------------------------------------
 
-flet run -r -v -w -p 34636 test_main_window.py
+start http://localhost:34636
+set FLET_NO_BROWSER=1
 
-echo.
-echo ❌ App Closed.
+watchfiles "python src/test_main_window.py" src
+
 pause
